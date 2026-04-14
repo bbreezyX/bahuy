@@ -1,0 +1,157 @@
+/** @jsxImportSource react */
+import { useState, useMemo } from "react";
+import { AnimatePresence, motion } from "motion/react";
+import type { ScheduleEvent, GameMode } from "@/data/schedules";
+import type { Member } from "@/data/members";
+import { gameModeColors } from "@/data/schedules";
+import { groupSchedulesByDate } from "@/lib/schedule-utils";
+import ScheduleCard from "./ScheduleCard";
+
+interface ScheduleViewProps {
+  schedules: ScheduleEvent[];
+  members: Member[];
+}
+
+const modes: { value: "all" | GameMode; label: string; color: string }[] = [
+  { value: "all", label: "ALL", color: "#C4A265" },
+  { value: "ranked", label: "RANKED", color: gameModeColors.ranked },
+  { value: "casual", label: "CASUAL", color: gameModeColors.casual },
+  { value: "tournament", label: "TURNAMEN", color: gameModeColors.tournament },
+  { value: "custom", label: "CUSTOM", color: gameModeColors.custom },
+  { value: "scrimmage", label: "SCRIM", color: gameModeColors.scrimmage },
+];
+
+export default function ScheduleView({ schedules, members }: ScheduleViewProps) {
+  const [activeMode, setActiveMode] = useState<"all" | GameMode>("all");
+
+  const filtered = useMemo(() => {
+    if (activeMode === "all") return schedules;
+    return schedules.filter((s) => s.gameMode === activeMode);
+  }, [schedules, activeMode]);
+
+  const grouped = useMemo(() => groupSchedulesByDate(filtered), [filtered]);
+
+  // Global index counter for stagger animation
+  let globalIndex = 0;
+
+  return (
+    <section className="pb-20 md:pb-28 relative">
+      <div className="mx-auto max-w-[1280px] px-4 md:px-6 lg:px-8">
+        {/* Filter pills */}
+        <div className="w-full overflow-x-auto scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0 mb-10">
+          <div className="flex items-center gap-1.5 sm:gap-2 w-max md:w-auto">
+            {modes.map((mode) => {
+              const isActive = activeMode === mode.value;
+              return (
+                <motion.button
+                  key={mode.value}
+                  onClick={() => setActiveMode(mode.value)}
+                  whileTap={{ scale: 0.96 }}
+                  className="relative whitespace-nowrap rounded-full px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm font-[var(--font-condensed)] uppercase tracking-[0.15em] font-medium border cursor-pointer"
+                  style={{
+                    borderColor: isActive ? "transparent" : "rgba(255,255,255,0.20)",
+                    color: isActive ? "#ffffff" : "rgba(255,255,255,0.65)",
+                    transition: "color 0.25s ease, border-color 0.25s ease",
+                  }}
+                >
+                  {isActive && (
+                    <motion.span
+                      layoutId="activeModePill"
+                      className="absolute inset-0 rounded-full overflow-hidden"
+                      style={{ backgroundColor: mode.color }}
+                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                    />
+                  )}
+                  <span className="relative z-10">{mode.label}</span>
+                </motion.button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Grouped schedule cards */}
+        <AnimatePresence mode="wait">
+          {grouped.length > 0 ? (
+            <motion.div
+              key={activeMode}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              {grouped.map((group) => (
+                <div key={group.group} className="mb-10 last:mb-0">
+                  {/* Group label */}
+                  <div className="flex items-center gap-4 mb-5">
+                    <h3 className="font-[var(--font-condensed)] text-sm sm:text-base uppercase tracking-[0.25em] text-primary/70 font-semibold whitespace-nowrap">
+                      {group.label}
+                    </h3>
+                    <div className="h-px flex-1 bg-white/[0.06]" />
+                    <span className="font-[var(--font-condensed)] text-xs uppercase tracking-[0.15em] text-white/25">
+                      {group.events.length}
+                    </span>
+                  </div>
+
+                  {/* Cards grid */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {group.events.map((event) => {
+                      const idx = globalIndex++;
+                      return (
+                        <ScheduleCard
+                          key={event.id}
+                          event={event}
+                          members={members}
+                          index={idx}
+                        />
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+            </motion.div>
+          ) : (
+            <motion.div
+              key="empty"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.4 }}
+              className="flex flex-col items-center justify-center py-24 text-center"
+            >
+              <motion.div
+                animate={{ y: [0, -8, 0] }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <svg className="w-12 h-12 text-muted-foreground/30 mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                  <line x1="16" y1="2" x2="16" y2="6" />
+                  <line x1="8" y1="2" x2="8" y2="6" />
+                  <line x1="3" y1="10" x2="21" y2="10" />
+                </svg>
+              </motion.div>
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.2 }}
+                className="font-[var(--font-condensed)] text-sm uppercase tracking-[0.15em] text-muted-foreground"
+              >
+                Belum ada jadwal
+              </motion.p>
+              <motion.button
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.35 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setActiveMode("all")}
+                className="mt-4 px-5 py-2 rounded-full border border-white/10 text-sm text-white/50 hover:text-white hover:border-white/20 transition-colors cursor-pointer font-[var(--font-condensed)] uppercase tracking-wider"
+              >
+                Reset Filter
+              </motion.button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </section>
+  );
+}

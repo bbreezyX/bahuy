@@ -134,8 +134,8 @@ export default function MemberGrid({ members }: MemberGridProps) {
           </div>
         </div>
 
-        {/* View container with overflow hidden for slide transitions */}
-        <div ref={viewRef} className="relative overflow-hidden">
+        {/* View container with overflow hidden for slide transitions, but padded to allow shadows to bleed */}
+        <div ref={viewRef} className="relative overflow-hidden p-4 sm:p-8 -m-4 sm:-m-8">
           <AnimatePresence mode="wait" initial={false}>
             {selectedMember ? (
               /* ── Profile view ── */

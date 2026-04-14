@@ -1,0 +1,46 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import Navbar from "../components/Navbar.astro";
+import Footer from "../components/Footer.astro";
+import ScheduleView from "../components/ScheduleView";
+import { schedules } from "../data/schedules";
+import { members } from "../data/members";
+---
+
+<MainLayout>
+  <Navbar currentPage="schedule" />
+  <main>
+    <section class="relative pt-32 md:pt-40 pb-8 md:pb-12">
+      <div class="mx-auto max-w-[1280px] px-4 md:px-6 lg:px-8">
+        <p
+          class="font-condensed text-sm sm:text-base uppercase tracking-[0.3em] text-primary/60 mb-3 font-semibold text-center sm:text-left"
+        >
+          Main Bareng
+        </p>
+        <div class="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
+          <h1
+            class="font-display text-5xl md:text-6xl lg:text-7xl tracking-wide text-white leading-none"
+          >
+            SCHEDULE
+          </h1>
+          <div class="hidden sm:flex items-center gap-3 flex-1">
+            <div class="h-px flex-1 bg-white/10"></div>
+            <span
+              class="font-condensed text-sm uppercase tracking-[0.2em] text-white/30"
+            >
+              Jadwal Main
+            </span>
+          </div>
+          <p
+            class="sm:hidden font-condensed text-sm uppercase tracking-[0.2em] text-white/30"
+          >
+            Jadwal Main
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <ScheduleView schedules={schedules} members={members} client:visible />
+  </main>
+  <Footer />
+</MainLayout>

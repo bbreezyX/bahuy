@@ -117,7 +117,12 @@ function HeroCard({ member }: { member: Member }) {
   const hasAvatar = !!member.avatar;
 
   return (
-    <div className="hero-card relative overflow-hidden bg-[#0e1112] rounded-lg">
+    <div 
+      className="hero-card relative overflow-hidden bg-[#0e1112] rounded-lg"
+      style={{
+        boxShadow: `0 0 0 1px rgba(255,255,255,0.05)`,
+      }}
+    >
       {/* Portrait content (behind frame) */}
       <div className="absolute inset-0 z-10">
         {hasAvatar ? (
