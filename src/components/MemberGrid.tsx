@@ -3,17 +3,18 @@ import { AnimatePresence, motion, useMotionValue, useAnimation, type PanInfo } f
 import type { Member } from "@/data/members";
 import { rankOrder } from "@/data/members";
 import MemberDialog from "./MemberDialog";
+import AvatarIcon from "./AvatarIcon";
 
 interface MemberGridProps {
   members: Member[];
 }
 
 const cardColors = [
-  { bg: "#3B3F4A", light: "#565B6A" },   // slate gray
-  { bg: "#1E5C8A", light: "#2E7AB8" },   // steel blue
-  { bg: "#1B6B42", light: "#2A8E5A" },   // forest green
-  { bg: "#1A5C6C", light: "#238B8E" },   // dark teal
-  { bg: "#2D3A4E", light: "#4A5F7A" },   // charcoal blue
+  { bg: "#2B3544", light: "#3E4D62" },   // gunmetal
+  { bg: "#1B4D6E", light: "#2A6B96" },   // steel blue
+  { bg: "#1A5C3A", light: "#258050" },   // tactical green
+  { bg: "#5C3A1A", light: "#7A5228" },   // bronze
+  { bg: "#3A2B4A", light: "#54406A" },   // slate purple
 ];
 
 const roles = [
@@ -54,7 +55,7 @@ function BioProfile({
   onClick: () => void;
   colorIndex: number;
 }) {
-  const accent = cardColors[colorIndex % cardColors.length].bg;
+  const colors = cardColors[colorIndex % cardColors.length];
 
   return (
     <motion.div
@@ -65,114 +66,140 @@ function BioProfile({
       transition={{ type: "spring", stiffness: 300, damping: 30 }}
     >
       <div
-        className="rounded-2xl sm:rounded-3xl"
+        className="rounded-2xl sm:rounded-3xl overflow-hidden"
         style={{
-          backgroundColor: "#111111",
+          backgroundColor: "#0c0c0c",
           border: isActive
-            ? `2px solid ${accent}35`
-            : "2px solid rgba(255,255,255,0.04)",
+            ? `1px solid ${colors.bg}40`
+            : "1px solid rgba(255,255,255,0.04)",
           transition: "border-color 0.4s ease",
         }}
       >
-        <div className="p-6 sm:p-8 md:p-10">
-          {/* ── Top bar: Role + Status ── */}
-          <div className="flex items-center justify-between mb-8 sm:mb-10">
-            <span className="font-[var(--font-condensed)] text-xs sm:text-sm uppercase tracking-[0.3em] text-white/50">
-              {roleLabel[member.role] || member.role}
-            </span>
-            <div className="flex items-center gap-2">
+        {/* ── Split layout: left accent panel + right content ── */}
+        <div className="flex flex-col sm:flex-row">
+          {/* Left panel — colored accent with monogram + role */}
+          <div
+            className="relative sm:w-52 md:w-60 shrink-0 flex flex-col items-center justify-center py-8 sm:py-0 overflow-hidden"
+            style={{ backgroundColor: colors.bg }}
+          >
+            {/* Decorative rings */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div className="w-40 h-40 sm:w-48 sm:h-48 rounded-full border border-white/[0.06]" />
+              <div className="absolute w-56 h-56 sm:w-64 sm:h-64 rounded-full border border-white/[0.03]" />
+            </div>
+            {/* Diagonal stripe texture */}
+            <div
+              className="absolute inset-0 opacity-[0.04] pointer-events-none"
+              style={{
+                backgroundImage: "repeating-linear-gradient(135deg, transparent, transparent 8px, rgba(255,255,255,1) 8px, rgba(255,255,255,1) 9px)",
+              }}
+            />
+
+            <div className="relative z-10 flex flex-col items-center gap-3">
+              <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-white/10 border border-white/15 flex items-center justify-center backdrop-blur-sm p-3 sm:p-4">
+                <AvatarIcon nickname={member.nickname} className="w-full h-full text-white/80" />
+              </div>
               <span
-                className={`h-1.5 w-1.5 rounded-full ${
-                  member.status === "online"
-                    ? "bg-green-400 animate-pulse-online"
-                    : "bg-white/20"
-                }`}
-              />
-              <span className="font-[var(--font-condensed)] text-xs uppercase tracking-[0.2em] text-white/50">
-                {member.status}
+                className="font-[var(--font-condensed)] text-[10px] uppercase tracking-[0.25em] px-3 py-1 rounded-full"
+                style={{ backgroundColor: "rgba(0,0,0,0.35)", color: "rgba(255,255,255,0.7)" }}
+              >
+                {roleLabel[member.role] || member.role}
               </span>
             </div>
           </div>
 
-          {/* ── Hero: Avatar block + Name ── */}
-          <div className="flex items-center gap-5 sm:gap-8">
-            <div className="relative shrink-0">
-              <div
-                className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-xl sm:rounded-2xl flex items-center justify-center"
-                style={{ backgroundColor: accent }}
-              >
-                <span className="font-display text-4xl sm:text-5xl md:text-6xl text-white/90">
-                  {member.nickname.charAt(0).toUpperCase()}
+          {/* Right panel — content */}
+          <div className="flex-1 min-w-0 p-6 sm:p-8 md:p-10 flex flex-col">
+            {/* Header row: Name + Status */}
+            <div className="flex items-start justify-between gap-4 mb-1">
+              <div className="min-w-0">
+                <h3 className="font-display text-4xl sm:text-5xl lg:text-6xl text-white leading-[0.85] tracking-wide truncate">
+                  {member.nickname}
+                </h3>
+                <p
+                  className="text-sm sm:text-base text-white/40 mt-2"
+                  style={{ fontFamily: "var(--font-body)" }}
+                >
+                  {member.name}
+                </p>
+              </div>
+              <div className="shrink-0 flex items-center gap-2 mt-2">
+                <span
+                  className={`h-2 w-2 rounded-full ${
+                    member.status === "online"
+                      ? "bg-green-400 animate-pulse-online"
+                      : "bg-white/20"
+                  }`}
+                />
+                <span className="font-[var(--font-condensed)] text-[10px] sm:text-xs uppercase tracking-[0.2em] text-white/40">
+                  {member.status}
                 </span>
               </div>
-              {member.isLeader && (
-                <div className="absolute -top-2 -right-2 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-yellow-500 flex items-center justify-center border-2 border-[#111111]">
-                  <CrownIcon className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-yellow-900" />
-                </div>
-              )}
             </div>
 
-            <div className="min-w-0 flex-1">
-              <h3 className="font-display text-5xl sm:text-6xl lg:text-7xl text-white leading-[0.9] tracking-wide">
-                {member.nickname}
-              </h3>
+            {/* Bio text */}
+            {member.bio && (
               <p
-                className="text-base sm:text-lg text-white/60 mt-2 sm:mt-3"
-                style={{ fontFamily: "var(--font-body)" }}
-              >
-                {member.name}
-              </p>
-            </div>
-          </div>
-
-          {/* ── Bio ── */}
-          {member.bio && (
-            <>
-              <div className="h-px w-full bg-white/[0.10] mt-6 mb-5 sm:mt-8 sm:mb-6" />
-              <p
-                className="text-sm sm:text-base text-white/45 leading-relaxed line-clamp-2 max-w-2xl"
+                className="text-sm text-white/35 leading-relaxed line-clamp-2 max-w-xl mt-4"
                 style={{ fontFamily: "var(--font-body)" }}
               >
                 {member.bio}
               </p>
-            </>
-          )}
+            )}
 
-          {/* ── Stats grid ── */}
-          <div className="h-px w-full bg-white/[0.10] mt-6 mb-6 sm:mt-8 sm:mb-8" />
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-y-5 gap-x-6 sm:gap-x-8">
-            <StatBlock label="Rank" value={member.rank} />
-            <StatBlock label="Kota" value={member.city} />
-            <StatBlock label="Joined" value={member.joinDate} />
-            <StatBlock label="K/D" value={member.kdRatio.toFixed(1)} />
-          </div>
+            {/* Spacer pushes stats to bottom */}
+            <div className="flex-1 min-h-4 sm:min-h-6" />
 
-          {/* ── Leader badge ── */}
-          {member.isLeader && (
-            <>
-              <div className="h-px w-full bg-white/[0.10] mt-6 sm:mt-8 mb-5 sm:mb-6" />
-              <div className="flex items-center gap-2">
-                <CrownIcon className="w-4 h-4 text-yellow-500" />
-                <span className="font-[var(--font-condensed)] text-[11px] sm:text-xs uppercase tracking-[0.25em] text-yellow-500/80">
+            {/* Stats strip — horizontal ticker-style */}
+            <div className="flex items-stretch gap-0 mt-4 rounded-xl overflow-hidden border border-white/[0.06]">
+              <StatCell label="Rank" value={member.rank} accent={colors.light} isFirst />
+              <StatCell label="Kota" value={member.city} />
+              <StatCell label="Joined" value={member.joinDate} />
+              <StatCell label="K/D" value={member.kdRatio.toFixed(1)} accent={colors.light} isLast />
+            </div>
+
+            {/* Leader badge */}
+            {member.isLeader && (
+              <div className="flex items-center gap-2 mt-5">
+                <CrownIcon className="w-3.5 h-3.5 text-yellow-500/80" />
+                <span className="font-[var(--font-condensed)] text-[10px] sm:text-[11px] uppercase tracking-[0.25em] text-yellow-500/60">
                   Clan Leader
                 </span>
               </div>
-            </>
-          )}
+            )}
+          </div>
         </div>
       </div>
     </motion.div>
   );
 }
 
-/* ── Stat block — value-first layout ── */
-function StatBlock({ label, value }: { label: string; value: string }) {
+/* ── Stat cell for the horizontal strip ── */
+function StatCell({
+  label,
+  value,
+  accent,
+  isFirst,
+  isLast,
+}: {
+  label: string;
+  value: string;
+  accent?: string;
+  isFirst?: boolean;
+  isLast?: boolean;
+}) {
+  const highlighted = isFirst || isLast;
   return (
-    <div>
-      <p className="font-display text-xl sm:text-2xl md:text-3xl text-white leading-none truncate">
+    <div
+      className={`flex-1 flex flex-col items-center justify-center py-3 sm:py-4 relative ${
+        !isLast ? "border-r border-white/[0.06]" : ""
+      }`}
+      style={highlighted ? { backgroundColor: `${accent}18` } : undefined}
+    >
+      <p className="font-display text-sm sm:text-lg md:text-xl text-white leading-none truncate px-2">
         {value}
       </p>
-      <p className="font-[var(--font-condensed)] text-[10px] sm:text-xs uppercase tracking-[0.2em] text-white/45 mt-1.5 sm:mt-2">
+      <p className="font-[var(--font-condensed)] text-[8px] sm:text-[10px] uppercase tracking-[0.2em] text-white/30 mt-1 sm:mt-1.5">
         {label}
       </p>
     </div>
@@ -623,15 +650,6 @@ export default function MemberGrid({ members }: MemberGridProps) {
             </motion.button>
           </motion.div>
         )}
-
-        {/* Member dialog */}
-        <MemberDialog
-          member={selectedMember}
-          open={!!selectedMember}
-          onOpenChange={(open) => {
-            if (!open) setSelectedMember(null);
-          }}
-        />
       </div>
     </section>
   );

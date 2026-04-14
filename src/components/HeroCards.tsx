@@ -1,17 +1,18 @@
 import { motion } from "motion/react";
 import { useState, useRef, useCallback, useEffect, useMemo } from "react";
 import type { Member } from "@/data/members";
+import AvatarIcon from "./AvatarIcon";
 
 interface HeroCardsProps {
   members: Member[];
 }
 
 const cardColors = [
-  { bg: "#3B3F4A", light: "#565B6A", glow: "rgba(86, 91, 106, 0.6)" },   // slate gray
-  { bg: "#1E5C8A", light: "#2E7AB8", glow: "rgba(46, 122, 184, 0.6)" },  // steel blue
-  { bg: "#1B6B42", light: "#2A8E5A", glow: "rgba(42, 142, 90, 0.6)" },   // forest green
-  { bg: "#1A5C6C", light: "#238B8E", glow: "rgba(35, 139, 142, 0.6)" },  // dark teal
-  { bg: "#2D3A4E", light: "#4A5F7A", glow: "rgba(74, 95, 122, 0.6)" },   // charcoal blue
+  { bg: "#2B3544", light: "#3E4D62", glow: "rgba(62, 77, 98, 0.6)" },    // gunmetal
+  { bg: "#1B4D6E", light: "#2A6B96", glow: "rgba(42, 107, 150, 0.6)" },  // steel blue
+  { bg: "#1A5C3A", light: "#258050", glow: "rgba(37, 128, 80, 0.6)" },   // tactical green
+  { bg: "#5C3A1A", light: "#7A5228", glow: "rgba(122, 82, 40, 0.6)" },   // bronze
+  { bg: "#3A2B4A", light: "#54406A", glow: "rgba(84, 64, 106, 0.6)" },   // slate purple
 ];
 
 // Measure an element's width reactively
@@ -227,25 +228,18 @@ export default function HeroCards({ members }: HeroCardsProps) {
                       <div className="absolute w-36 h-36 rounded-full border border-white/[0.07]" />
                       <div className="absolute w-52 h-52 rounded-full border border-white/[0.04]" />
 
-                      <div className="relative w-24 h-24 rounded-full bg-white/10 border-2 border-white/20 flex items-center justify-center">
-                        <span className="font-display text-5xl text-white/90">
-                          {member.nickname.charAt(0)}
-                        </span>
-                        {member.isLeader && (
-                          <div className="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-yellow-500 flex items-center justify-center text-sm shadow-lg">
-                            👑
-                          </div>
-                        )}
+                      <div className="relative w-24 h-24 rounded-full bg-white/10 border-2 border-white/20 flex items-center justify-center p-3">
+                        <AvatarIcon nickname={member.nickname} className="w-full h-full text-white/80" />
                       </div>
                     </div>
 
                     {/* Info panel — bottom section */}
-                    <div className="bg-[#0e0e0e] px-5 py-4 flex flex-col items-center text-center">
-                      <h3 className="font-display text-2xl text-white leading-none tracking-wide">
+                    <div className="bg-[#F5F5F5] px-5 py-4 flex flex-col items-center text-center">
+                      <h3 className="font-display text-2xl text-[#111] leading-none tracking-wide">
                         {member.nickname}
                       </h3>
 
-                      <p className="text-xs text-white/40 mt-1.5" style={{ fontFamily: "var(--font-body)" }}>
+                      <p className="text-xs text-[#666] mt-1.5" style={{ fontFamily: "var(--font-body)" }}>
                         {member.name} · {member.rank}
                       </p>
                     </div>
@@ -325,25 +319,18 @@ export default function HeroCards({ members }: HeroCardsProps) {
                       <div className="absolute w-32 h-32 rounded-full border border-white/[0.07]" />
                       <div className="absolute w-48 h-48 rounded-full border border-white/[0.04]" />
 
-                      <div className="relative w-20 h-20 rounded-full bg-white/10 border-2 border-white/20 flex items-center justify-center">
-                        <span className="font-display text-4xl text-white/90">
-                          {member.nickname.charAt(0)}
-                        </span>
-                        {member.isLeader && (
-                          <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-yellow-500 flex items-center justify-center text-xs shadow-lg">
-                            👑
-                          </div>
-                        )}
+                      <div className="relative w-20 h-20 rounded-full bg-white/10 border-2 border-white/20 flex items-center justify-center p-2.5">
+                        <AvatarIcon nickname={member.nickname} className="w-full h-full text-white/80" />
                       </div>
                     </div>
 
                     {/* Info panel */}
-                    <div className="bg-[#0e0e0e] px-4 py-3.5 flex flex-col items-center text-center">
-                      <h3 className="font-display text-xl text-white leading-none tracking-wide">
+                    <div className="bg-[#F5F5F5] px-4 py-3.5 flex flex-col items-center text-center">
+                      <h3 className="font-display text-xl text-[#111] leading-none tracking-wide">
                         {member.nickname}
                       </h3>
 
-                      <p className="text-xs text-white/40 mt-1" style={{ fontFamily: "var(--font-body)" }}>
+                      <p className="text-xs text-[#666] mt-1" style={{ fontFamily: "var(--font-body)" }}>
                         {member.name} · {member.rank}
                       </p>
                     </div>

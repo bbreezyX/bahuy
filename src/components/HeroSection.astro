@@ -24,31 +24,46 @@ const featuredMembers = members.filter((m) => m.isFeatured).slice(0, 5);
         />
       </div>
 
-      <!-- Clan Name styled like reference image -->
-      <div class="flex flex-col items-center mb-4 animate-slide-up w-full">
-        <h1
-          class="font-display text-center leading-[0.8] text-white uppercase select-none drop-shadow-2xl"
-        >
+      <!-- Clan Name -->
+      <div class="flex flex-col items-center mb-6 md:mb-10 w-full animate-slide-up">
+        {/* Subtitle tag above name */}
+        <div class="hero-subtitle mb-4 md:mb-5">
           <span
-            class="block text-[5rem] sm:text-[7.5rem] md:text-[9rem] lg:text-[11.5rem] xl:text-[14rem] tracking-tighter"
+            class="font-condensed text-[10px] sm:text-xs uppercase tracking-[0.35em] text-primary/70 font-semibold"
+          >
+            {CLAN.subtitle}
+          </span>
+        </div>
+
+        <h1
+          class="hero-title relative text-center leading-[0.8] text-white uppercase select-none"
+        >
+          {/* Ghost text behind for depth */}
+          <span
+            class="hero-ghost absolute inset-0 font-display text-[5rem] sm:text-[7.5rem] md:text-[9rem] lg:text-[11.5rem] xl:text-[14rem] tracking-tighter text-white/[0.03] select-none pointer-events-none scale-[1.02] blur-[1px]"
+            aria-hidden="true"
           >
             BAHUY.
           </span>
           <span
-            class="block text-[2.5rem] sm:text-[3.5rem] md:text-[4.5rem] lg:text-[5.5rem] xl:text-[6.5rem] tracking-[0.2em] text-white -mt-2 md:-mt-4"
+            class="block font-display text-[5rem] sm:text-[7.5rem] md:text-[9rem] lg:text-[11.5rem] xl:text-[14rem] tracking-tighter drop-shadow-[0_4px_60px_rgba(196,162,101,0.12)]"
+          >
+            BAHUY.
+          </span>
+          <span
+            class="block font-display text-[2.5rem] sm:text-[3.5rem] md:text-[4.5rem] lg:text-[5.5rem] xl:text-[6.5rem] tracking-[0.2em] text-white -mt-2 md:-mt-4"
           >
             N FRIENDS
           </span>
         </h1>
-      </div>
 
-      <!-- Motto -->
-      <p
-        class="text-xs md:text-sm italic text-muted-foreground text-center mb-2 md:mb-10 animate-fade-in-delay"
-        style="font-family: var(--font-body);"
-      >
-        "{CLAN.motto}"
-      </p>
+        {/* Motto */}
+        <p
+          class="hero-motto mt-5 md:mt-7 font-condensed text-sm sm:text-base md:text-lg uppercase tracking-[0.3em] text-white/30"
+        >
+          {CLAN.motto}
+        </p>
+      </div>
     </div>
 
     <!-- Fan-spread hero cards (at the bottom) -->
@@ -60,31 +75,32 @@ const featuredMembers = members.filter((m) => m.isFeatured).slice(0, 5);
 
 <style>
   @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
   @keyframes slideUp {
-    from {
-      opacity: 0;
-      transform: translateY(30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
   }
+
   .animate-fade-in {
     animation: fadeIn 0.8s ease-out both;
   }
   .animate-slide-up {
     animation: slideUp 0.8s ease-out 0.1s both;
   }
-  .animate-fade-in-delay {
-    animation: fadeIn 0.8s ease-out 0.3s both;
+
+  .hero-subtitle {
+    animation: fadeIn 0.6s ease-out 0.05s both;
+  }
+  .hero-title {
+    animation: slideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+  }
+  .hero-ghost {
+    animation: fadeIn 1.2s ease-out 0.4s both;
+  }
+  .hero-motto {
+    animation: fadeIn 0.8s ease-out 0.5s both;
   }
 
   .hero-char-mobile {

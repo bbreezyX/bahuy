@@ -24,15 +24,33 @@ import { CLAN } from "../data/clan";
   <body class="min-h-screen overflow-x-hidden">
     <!-- Corridor grid background -->
     <div class="corridor-grid" aria-hidden="true">
-      <div class="corridor-grid__left"></div>
-      <div class="corridor-grid__right"></div>
+      <svg class="corridor-grid__defs" width="0" height="0">
+        <defs>
+          <pattern id="grid-dashed" width="60" height="60" patternUnits="userSpaceOnUse">
+            <line x1="60" y1="0" x2="60" y2="60" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="4 3" />
+            <line x1="0" y1="60" x2="60" y2="60" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="4 3" />
+          </pattern>
+        </defs>
+      </svg>
+      <div class="corridor-grid__left">
+        <svg class="corridor-grid__svg" preserveAspectRatio="none">
+          <rect width="100%" height="100%" fill="url(#grid-dashed)" />
+        </svg>
+      </div>
+      <div class="corridor-grid__right">
+        <svg class="corridor-grid__svg" preserveAspectRatio="none">
+          <rect width="100%" height="100%" fill="url(#grid-dashed)" />
+        </svg>
+      </div>
     </div>
 
     <!-- Decorative character images -->
     <div class="char-deco char-deco--left" aria-hidden="true">
+      <div class="char-glow"></div>
       <img src="/cha01.png" alt="" draggable="false" />
     </div>
     <div class="char-deco char-deco--right" aria-hidden="true">
+      <div class="char-glow"></div>
       <img src="/cha02.png" alt="" draggable="false" />
     </div>
 
@@ -52,16 +70,22 @@ import { CLAN } from "../data/clan";
     overflow: hidden;
   }
 
+  .corridor-grid__defs {
+    position: absolute;
+  }
+
   .corridor-grid__left,
   .corridor-grid__right {
     position: absolute;
     top: -20%;
     width: 42%;
     height: 140%;
-    background-image:
-      linear-gradient(to right, rgba(255, 255, 255, 0.06) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
-    background-size: 60px 60px;
+  }
+
+  .corridor-grid__svg {
+    width: 100%;
+    height: 100%;
+    display: block;
   }
 
   .corridor-grid__left {
@@ -106,6 +130,7 @@ import { CLAN } from "../data/clan";
   .char-deco--left img {
     mask-image: linear-gradient(to right, black 65%, transparent 95%);
     -webkit-mask-image: linear-gradient(to right, black 65%, transparent 95%);
+    animation: char-float-left 6s ease-in-out infinite;
   }
 
   .char-deco--right {
@@ -115,11 +140,59 @@ import { CLAN } from "../data/clan";
   .char-deco--right img {
     mask-image: linear-gradient(to left, black 65%, transparent 95%);
     -webkit-mask-image: linear-gradient(to left, black 65%, transparent 95%);
+    animation: char-float-right 7s ease-in-out infinite;
+  }
+
+  /* Ambient glow beneath characters */
+  .char-glow {
+    position: absolute;
+    bottom: -5%;
+    left: 50%;
+    translate: -50% 0;
+    width: 70%;
+    height: 30%;
+    border-radius: 50%;
+    z-index: 0;
+    opacity: 0;
+    filter: blur(60px);
+  }
+
+  .char-deco--left .char-glow {
+    background: radial-gradient(ellipse, rgba(196, 162, 101, 0.25), transparent 70%);
+    animation: glow-pulse 5s ease-in-out 1s infinite;
+  }
+
+  .char-deco--right .char-glow {
+    background: radial-gradient(ellipse, rgba(140, 120, 180, 0.2), transparent 70%);
+    animation: glow-pulse 6s ease-in-out 2s infinite;
+  }
+
+  @keyframes char-float-left {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(-0.4deg); }
+  }
+
+  @keyframes char-float-right {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-8px) rotate(0.3deg); }
+  }
+
+  @keyframes glow-pulse {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.1); }
   }
 
   @media (min-width: 1024px) {
     .char-deco {
       display: block;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .char-deco--left img,
+    .char-deco--right img,
+    .char-glow {
+      animation: none;
     }
   }
 </style>

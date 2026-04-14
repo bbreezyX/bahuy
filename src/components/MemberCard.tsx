@@ -2,6 +2,7 @@
 import React from "react";
 import { motion } from "motion/react";
 import type { Member } from "@/data/members";
+import AvatarIcon from "./AvatarIcon";
 
 interface MemberCardProps {
   member: Member;
@@ -115,10 +116,8 @@ export default function MemberCard({ member, index, onClick }: MemberCardProps) 
           {/* Decorative ring */}
           <div className="absolute w-28 h-28 rounded-full border border-white/[0.06] top-2" />
 
-          <div className="relative w-18 h-18 rounded-full bg-white/10 border-2 border-white/20 flex items-center justify-center w-[72px] h-[72px]">
-            <span className="font-display text-4xl text-white/90">
-              {member.nickname.charAt(0).toUpperCase()}
-            </span>
+          <div className="relative w-[72px] h-[72px] rounded-full bg-white/10 border-2 border-white/20 flex items-center justify-center p-3">
+            <AvatarIcon nickname={member.nickname} className="w-full h-full text-white/80" />
             {member.isLeader && (
               <div className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-yellow-500 flex items-center justify-center text-xs shadow-lg">
                 👑

@@ -6,6 +6,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import AvatarIcon from "./AvatarIcon";
 
 interface MemberDialogProps {
   member: Member | null;
@@ -60,10 +61,8 @@ export default function MemberDialog({ member, open, onOpenChange }: MemberDialo
             <div className="absolute w-32 h-32 rounded-full border border-white/[0.06] top-0" />
 
             {/* Avatar */}
-            <div className="relative w-24 h-24 rounded-full bg-white/10 border-2 border-white/20 flex items-center justify-center mb-4">
-              <span className="font-display text-5xl text-white/90">
-                {member.nickname.charAt(0).toUpperCase()}
-              </span>
+            <div className="relative w-24 h-24 rounded-full bg-white/10 border-2 border-white/20 flex items-center justify-center mb-4 p-3.5">
+              <AvatarIcon nickname={member.nickname} className="w-full h-full text-white/80" />
               {member.isLeader && (
                 <div className="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-yellow-500 flex items-center justify-center text-sm shadow-lg">
                   👑
