@@ -51,7 +51,7 @@ export default function MemberProfile({ member, onBack }: MemberProfileProps) {
           transition={{ type: "spring", stiffness: 300, damping: 25, delay: 0.05 }}
           className="shrink-0 w-full lg:w-[320px] xl:w-[360px]"
         >
-          <div className="relative aspect-[3/4.6] overflow-hidden bg-[#0e1112] rounded-lg" style={{ boxShadow: `0 4px 16px ${bg}40` }}>
+          <div className="relative aspect-[3/4.6] overflow-hidden bg-[#0e1112] rounded-lg" style={{ boxShadow: `0 0 0 1px rgba(255,255,255,0.08), 0 0 40px -8px ${bg}80` }}>
             {/* Portrait content */}
             <div className="absolute inset-0 z-10">
               {member.avatar ? (

@@ -51,7 +51,14 @@ export default function MemberCard({ member, index, isSelected, onClick }: Membe
       className="cursor-pointer"
       onClick={onClick}
     >
-      <div className="relative aspect-[3/4.6] overflow-hidden bg-[#0e1112] rounded-lg">
+      <div 
+        className="relative aspect-[3/4.6] overflow-hidden bg-[#0e1112] rounded-lg transition-shadow duration-300"
+        style={{
+          boxShadow: isSelected 
+            ? `0 0 0 1px rgba(255,255,255,0.15), 0 0 32px -4px ${bg}80`
+            : `0 0 0 1px rgba(255,255,255,0.05), 0 0 16px -4px rgba(0,0,0,0.5)`,
+        }}
+      >
         {/* Portrait content (behind frame, only visible inside the shape) */}
         <div className="absolute inset-0 z-10">
           {member.avatar ? (

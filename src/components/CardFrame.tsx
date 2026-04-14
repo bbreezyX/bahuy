@@ -29,7 +29,7 @@ export default function CardFrame({ accent = "#f9c651", bgFill, hasAvatar }: Car
     " L 40 5 L 22 5 Z";
 
   // Outer rect (CW) + inner cutout (CCW) = fills only the border region
-  const frameMask = `M 0 0 L 150 0 L 150 230 L 0 230 Z ${frameCCW}`;
+  const frameMask = `M -10 -10 L 160 -10 L 160 240 L -10 240 Z ${frameCCW}`;
 
   return (
     <svg
@@ -54,7 +54,7 @@ export default function CardFrame({ accent = "#f9c651", bgFill, hasAvatar }: Car
 
       {/* Outer border shape */}
       <path
-        d="M 10 0 L 140 0 L 150 10 L 150 220 L 140 230 L 10 230 L 0 220 L 0 10 Z"
+        d="M 10 1 L 140 1 L 149 10 L 149 220 L 140 229 L 10 229 L 1 220 L 1 10 Z"
         fill="none"
         stroke={accent}
         strokeWidth="1.2"
