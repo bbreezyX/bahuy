@@ -2,20 +2,18 @@
 import { CLAN } from "../data/clan";
 ---
 
-<footer class="border-t border-border bg-background py-10 md:py-12">
-  <div
-    class="mx-auto max-w-[1280px] px-4 md:px-6 lg:px-8 flex flex-col items-center gap-5"
-  >
+<footer class="bg-transparent py-16 md:py-24">
+  <div class="mx-auto max-w-[1280px] px-6 flex flex-col items-center gap-10">
     <!-- Logo -->
     <div
-      class="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 border border-primary/20"
+      class="flex h-12 w-12 items-center justify-center grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-500"
     >
       <svg
-        class="h-5 w-5 text-muted-foreground"
+        class="h-8 w-8 text-primary"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
-        stroke-width="2"
+        stroke-width="1.5"
         stroke-linecap="round"
         stroke-linejoin="round"
       >
@@ -27,25 +25,31 @@ import { CLAN } from "../data/clan";
       </svg>
     </div>
 
-    <!-- Copyright -->
-    <p
-      class="font-condensed text-[11px] uppercase tracking-[0.2em] text-muted-foreground text-center"
-    >
-      &copy; {new Date().getFullYear()}
-      {CLAN.name} — All Rights Reserved
-    </p>
+    <!-- Copyright & Info -->
+    <div class="flex flex-col items-center gap-3">
+      <p
+        class="font-display text-4xl md:text-5xl uppercase tracking-tighter text-white"
+      >
+        {CLAN.name}
+      </p>
+      <p
+        class="font-condensed text-[12px] font-semibold uppercase tracking-[0.3em] text-white/50"
+      >
+        &copy; {new Date().getFullYear()} — Indonesia — All Rights Reserved
+      </p>
+    </div>
 
     <!-- Social Icons -->
-    <div class="flex items-center gap-3">
+    <div class="flex items-center gap-10">
       <a
         href={CLAN.socials.instagram}
         target="_blank"
         rel="noopener"
-        class="flex h-9 w-9 items-center justify-center rounded-lg border border-border text-muted-foreground hover:text-primary hover:border-primary/40 transition-all"
+        class="text-white/60 hover:text-primary transition-all duration-300 transform hover:scale-110"
         aria-label="Instagram"
       >
         <svg
-          class="h-4 w-4"
+          class="h-6 w-6"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -64,11 +68,11 @@ import { CLAN } from "../data/clan";
         href={CLAN.socials.discord}
         target="_blank"
         rel="noopener"
-        class="flex h-9 w-9 items-center justify-center rounded-lg border border-border text-muted-foreground hover:text-primary hover:border-primary/40 transition-all"
+        class="text-white/60 hover:text-primary transition-all duration-300 transform hover:scale-110"
         aria-label="Discord"
       >
         <svg
-          class="h-4 w-4"
+          class="h-6 w-6"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -84,11 +88,11 @@ import { CLAN } from "../data/clan";
         href={CLAN.socials.youtube}
         target="_blank"
         rel="noopener"
-        class="flex h-9 w-9 items-center justify-center rounded-lg border border-border text-muted-foreground hover:text-primary hover:border-primary/40 transition-all"
+        class="text-white/60 hover:text-primary transition-all duration-300 transform hover:scale-110"
         aria-label="YouTube"
       >
         <svg
-          class="h-4 w-4"
+          class="h-6 w-6"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
