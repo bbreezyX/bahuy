@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect, useMemo } from "react";
 import type { Member } from "@/data/members";
 
 interface HeroCardsProps {
@@ -14,19 +14,41 @@ const cardColors = [
   { bg: "#2D3A4E", light: "#4A5F7A", glow: "rgba(74, 95, 122, 0.6)" },   // charcoal blue
 ];
 
-const fanPositions = [
-  { rotate: -22, x: -300, y: 30, z: 1, scale: 0.85 },
-  { rotate: -10, x: -150, y: 10, z: 2, scale: 0.92 },
-  { rotate: 0, x: 0, y: -16, z: 5, scale: 1 },
-  { rotate: 10, x: 150, y: 10, z: 2, scale: 0.92 },
-  { rotate: 22, x: 300, y: 30, z: 1, scale: 0.85 },
-];
+// Measure an element's width reactively
+function useElementWidth(ref: React.RefObject<HTMLDivElement | null>) {
+  const [width, setWidth] = useState(900);
+  useEffect(() => {
+    if (!ref.current) return;
+    const ro = new ResizeObserver(([entry]) => setWidth(entry.contentRect.width));
+    ro.observe(ref.current);
+    return () => ro.disconnect();
+  }, []);
+  return width;
+}
 
-const mobileFanPositions = [
-  { rotate: -18, x: -90, y: 20, z: 1, scale: 0.82 },
-  { rotate: 0, x: 0, y: -8, z: 5, scale: 1 },
-  { rotate: 18, x: 90, y: 20, z: 1, scale: 0.82 },
-];
+// Compute 5-card fan positions so outermost cards stay within the container width
+function computeDesktopFan(containerW: number, cardW = 260) {
+  // Max safe half-spread: half-container minus half-card minus a small margin
+  const halfSpread = Math.max((containerW / 2) - (cardW / 2) - 16, 80);
+  const step = halfSpread / 2;
+  return [
+    { rotate: -22, x: -step * 2, y: 30, z: 1, scale: 0.85 },
+    { rotate: -10, x: -step,     y: 10, z: 2, scale: 0.92 },
+    { rotate:   0, x:  0,        y: -16, z: 5, scale: 1    },
+    { rotate:  10, x:  step,     y: 10, z: 2, scale: 0.92 },
+    { rotate:  22, x:  step * 2, y: 30, z: 1, scale: 0.85 },
+  ];
+}
+
+// Compute 3-card mobile fan positions — center card dominant, sides overflow edges
+function computeMobileFan(containerW: number, cardW = 240) {
+  const spread = Math.max((containerW / 2) + 20, 120);
+  return [
+    { rotate: -14, x: -spread, y: 30, z: 1, scale: 0.88 },
+    { rotate:   0, x:  0,      y: -10, z: 5, scale: 1    },
+    { rotate:  14, x:  spread, y: 30, z: 1, scale: 0.88 },
+  ];
+}
 
 function CrosshairSVG({ className }: { className?: string }) {
   return (
@@ -162,33 +184,33 @@ function MagicCard({
 }
 
 export default function HeroCards({ members }: HeroCardsProps) {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  // Refs to measure actual rendered container width
+  const desktopRef = useRef<HTMLDivElement>(null);
+  const mobileRef  = useRef<HTMLDivElement>(null);
+  const desktopW   = useElementWidth(desktopRef);
+  const mobileW    = useElementWidth(mobileRef);
+
+  // Dynamic fan positions — recomputed whenever container width changes
+  const fanPositions       = useMemo(() => computeDesktopFan(desktopW), [desktopW]);
+  const mobileFanPositions = useMemo(() => computeMobileFan(mobileW),   [mobileW]);
+
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [mobileActiveIndex, setMobileActiveIndex] = useState<number | null>(null);
-  const hoverTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleMobileTap = useCallback((index: number) => {
     setMobileActiveIndex((prev) => (prev === index ? null : index));
   }, []);
 
-  const handleHover = useCallback((index: number) => {
-    if (hoverTimer.current) clearTimeout(hoverTimer.current);
-    hoverTimer.current = setTimeout(() => setHoveredIndex(index), 150);
+  // Roulette: click a card → whole fan rotates so that card goes to center slot.
+  // Click the same card again to reset.
+  const handleDesktopClick = useCallback((index: number) => {
+    setSelectedIndex((prev) => (prev === index ? null : index));
   }, []);
 
-  const handleLeave = useCallback(() => {
-    if (hoverTimer.current) clearTimeout(hoverTimer.current);
-    hoverTimer.current = null;
-    setHoveredIndex(null);
-  }, []);
-
-  // Compute roulette positions: when a card is hovered, the whole fan
-  // rotates so the hovered card lands at position 2 (center).
   const getDesktopPos = (cardIndex: number) => {
-    if (hoveredIndex === null) return fanPositions[cardIndex] || fanPositions[2];
-    // Shift: which slot should this card occupy?
-    const offset = hoveredIndex - 2; // how many slots the hovered card is away from center
+    if (selectedIndex === null) return fanPositions[cardIndex] ?? fanPositions[2];
+    const offset = selectedIndex - 2;
     let slot = cardIndex - offset;
-    // Wrap around for roulette feel
     const len = fanPositions.length;
     slot = ((slot % len) + len) % len;
     return fanPositions[slot];
@@ -198,13 +220,13 @@ export default function HeroCards({ members }: HeroCardsProps) {
     <>
       {/* Desktop fan-spread */}
       <div
+        ref={desktopRef}
         className="hidden md:flex items-end justify-center relative h-[440px] w-full max-w-[1000px] overflow-visible"
-        onMouseLeave={handleLeave}
       >
         {members.map((member, i) => {
           const pos = getDesktopPos(i);
           const colors = cardColors[i % cardColors.length];
-          const isCentered = hoveredIndex === i;
+          const isCentered = selectedIndex === i;
           return (
             <motion.div
               key={member.nickname}
@@ -224,7 +246,7 @@ export default function HeroCards({ members }: HeroCardsProps) {
                   zIndex: { delay: isCentered ? 0 : 0.15 },
                 }
               }}
-              onMouseEnter={() => handleHover(i)}
+              onClick={() => handleDesktopClick(i)}
               style={{
                 transformOrigin: "bottom center",
               }}
@@ -301,7 +323,7 @@ export default function HeroCards({ members }: HeroCardsProps) {
       </div>
 
       {/* Mobile compact fan-spread */}
-      <div className="md:hidden flex items-end justify-center relative h-[330px] w-full overflow-visible">
+      <div ref={mobileRef} className="md:hidden flex items-end justify-center relative h-[420px] w-full overflow-visible">
         {members.slice(0, 3).map((member, i) => {
           const colors = cardColors[i % cardColors.length];
           const isMobileActive = mobileActiveIndex === i;
@@ -340,56 +362,59 @@ export default function HeroCards({ members }: HeroCardsProps) {
               }}
             >
               <MagicCard
-                className="w-[180px]" style={{ borderRadius: '22px 22px 16px 16px' }}
+                className="w-[240px]" style={{ borderRadius: '26px 26px 18px 18px' }}
                 glowColor={colors.glow}
               >
                 <div
-                  className="w-full overflow-hidden shadow-xl shadow-black/40 relative"
-                  style={{ borderRadius: '22px 22px 16px 16px', backgroundColor: colors.bg }}
+                  className="w-full overflow-hidden shadow-2xl shadow-black/50 relative"
+                  style={{ borderRadius: '26px 26px 18px 18px', backgroundColor: colors.bg }}
                 >
-                  <CrosshairSVG className="absolute top-3 right-3 w-12 h-12 text-white pointer-events-none" />
-                  <div className="px-3.5 pt-3.5 pb-0">
-                    <p className="font-[var(--font-condensed)] text-[10px] font-semibold uppercase tracking-[0.2em] text-white/50 mb-0.5">
+                  <CrosshairSVG className="absolute top-4 right-4 w-16 h-16 text-white pointer-events-none" />
+                  <DiamondGrid className="absolute bottom-0 left-0 w-24 h-24 text-white pointer-events-none" />
+                  <div className="px-5 pt-5 pb-0">
+                    <p className="font-[var(--font-condensed)] text-xs font-semibold uppercase tracking-[0.25em] text-white/50 mb-0.5">
                       {member.role === "sniper" ? "SHARPSHOOTER" : member.role === "rusher" ? "ASSAULT" : member.role === "support" ? "TACTICAL" : "FIELD MEDIC"}
                     </p>
-                    <h3 className="font-display text-2xl text-white leading-none tracking-wide">
+                    <h3 className="font-display text-3xl text-white leading-none tracking-wide">
                       {member.nickname}
                     </h3>
                   </div>
-                  <div className="absolute top-3 right-3 z-10">
+                  <div className="absolute top-4 right-4 z-10">
                     <div
-                      className="flex items-center gap-1 rounded-full px-2 py-1 shadow-lg"
+                      className="flex items-center gap-1.5 rounded-full px-3 py-1.5 shadow-lg"
                       style={{ backgroundColor: colors.light }}
                     >
-                      <svg className="w-2.5 h-2.5 text-yellow-300" viewBox="0 0 24 24" fill="currentColor">
+                      <svg className="w-3 h-3 text-yellow-300" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                       </svg>
-                      <span className="font-display text-[11px] text-white">
+                      <span className="font-display text-sm text-white">
                         {member.kdRatio.toFixed(1)}
                       </span>
                     </div>
                   </div>
-                  <div className="relative flex flex-col items-center justify-center h-[200px] overflow-hidden">
-                    <div className="absolute w-28 h-28 rounded-full border border-white/10" />
-                    <div className="w-14 h-14 rounded-full bg-white/10 border-2 border-white/20 flex items-center justify-center">
-                      <span className="font-display text-2xl text-white/90">
+                  <div className="relative flex flex-col items-center justify-center h-[270px] overflow-hidden">
+                    <div className="absolute w-36 h-36 rounded-full border border-white/10" />
+                    <div className="absolute w-52 h-52 rounded-full border border-white/5" />
+                    <div className="w-20 h-20 rounded-full bg-white/10 border-2 border-white/20 flex items-center justify-center">
+                      <span className="font-display text-4xl text-white/90">
                         {member.nickname.charAt(0)}
                       </span>
                       {member.isLeader && (
-                        <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-yellow-500 flex items-center justify-center text-[10px] shadow-lg">
+                        <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-yellow-500 flex items-center justify-center text-xs shadow-lg">
                           👑
                         </div>
                       )}
                     </div>
                     <p
-                      className="mt-2 text-xs font-medium text-white/70"
+                      className="mt-3 text-sm font-medium text-white/70"
                       style={{ fontFamily: "var(--font-body)" }}
                     >
                       {member.name}
                     </p>
-                    <p className="font-[var(--font-condensed)] text-[10px] font-semibold uppercase tracking-[0.2em] text-white/40 mt-0.5">
+                    <p className="font-[var(--font-condensed)] text-xs font-semibold uppercase tracking-[0.2em] text-white/40 mt-0.5">
                       {member.rank}
                     </p>
+                    <WaveDeco className="absolute bottom-2 left-0 w-full text-white pointer-events-none" />
                   </div>
                 </div>
               </MagicCard>

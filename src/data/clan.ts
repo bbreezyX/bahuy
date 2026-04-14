@@ -1,7 +1,7 @@
 export const CLAN = {
   name: "BAHUY N FRIENDS",
   subtitle: "POINT BLANK CLAN",
-  motto: "One Shot, One Kill",
+  motto: "SPONTANNN",
   established: 2024,
   region: "Indonesia",
   stats: {

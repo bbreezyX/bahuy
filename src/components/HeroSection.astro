@@ -8,12 +8,22 @@ const featuredMembers = members.filter((m) => m.isFeatured).slice(0, 5);
 
 <section
   id="hero"
-  class="relative overflow-x-clip min-h-svh flex flex-col items-center justify-center pt-24 pb-2 md:pb-8"
+  class="relative overflow-x-clip min-h-svh flex flex-col items-center justify-center pt-16 pb-2 md:pt-24 md:pb-8"
 >
   <div
-    class="relative w-full max-w-[1280px] px-4 md:px-6 lg:px-8 flex flex-col justify-between items-center flex-1"
+    class="relative w-full max-w-[1280px] px-4 md:px-6 lg:px-8 flex flex-col items-center flex-1 justify-center md:justify-between gap-6 md:gap-0"
   >
-    <div class="w-full flex-1 flex flex-col justify-center mt-6">
+    <div class="w-full flex flex-col items-center md:flex-1 md:justify-center mt-0 md:mt-6">
+      <!-- Mobile hero character -->
+      <div class="sm:hidden flex justify-center animate-fade-in mb-[-2rem]">
+        <img
+          src="/cha3.png"
+          alt=""
+          draggable="false"
+          class="hero-char-mobile"
+        />
+      </div>
+
       <!-- Clan Name styled like reference image -->
       <div class="flex flex-col items-center mb-4 animate-slide-up w-full">
         <h1
@@ -34,7 +44,7 @@ const featuredMembers = members.filter((m) => m.isFeatured).slice(0, 5);
 
       <!-- Motto -->
       <p
-        class="text-xs md:text-sm italic text-muted-foreground text-center mb-6 md:mb-10 animate-fade-in-delay"
+        class="text-xs md:text-sm italic text-muted-foreground text-center mb-2 md:mb-10 animate-fade-in-delay"
         style="font-family: var(--font-body);"
       >
         "{CLAN.motto}"
@@ -42,7 +52,7 @@ const featuredMembers = members.filter((m) => m.isFeatured).slice(0, 5);
     </div>
 
     <!-- Fan-spread hero cards (at the bottom) -->
-    <div class="flex justify-center overflow-visible w-full mt-auto">
+    <div class="flex justify-center overflow-visible w-full md:mt-auto">
       <HeroCards members={featuredMembers} client:visible />
     </div>
   </div>
@@ -75,5 +85,14 @@ const featuredMembers = members.filter((m) => m.isFeatured).slice(0, 5);
   }
   .animate-fade-in-delay {
     animation: fadeIn 0.8s ease-out 0.3s both;
+  }
+
+  .hero-char-mobile {
+    width: 280px;
+    height: auto;
+    pointer-events: none;
+    filter: brightness(0.8);
+    mask-image: linear-gradient(to bottom, black 50%, transparent 95%);
+    -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 95%);
   }
 </style>

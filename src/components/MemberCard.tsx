@@ -1,3 +1,5 @@
+/** @jsxImportSource react */
+import React from "react";
 import { motion } from "motion/react";
 import type { Member } from "@/data/members";
 
