@@ -1,0 +1,273 @@
+---
+import { CLAN } from "../data/clan";
+---
+
+<nav class="fixed top-0 left-0 right-0 z-50 h-20">
+  <div
+    class="mx-auto flex h-full max-w-[1280px] items-center justify-between px-4 md:px-6 lg:px-8 relative"
+  >
+    <!-- Left: Desktop Nav Links -->
+    <div class="flex-1 flex items-center justify-start">
+      <div class="hidden md:flex items-center gap-10">
+        <a
+          href="#hero"
+          class="font-condensed text-sm font-semibold uppercase tracking-[0.15em] text-white hover:text-primary transition-colors"
+          >Home</a
+        >
+        <a
+          href="#members"
+          class="font-condensed text-sm font-semibold uppercase tracking-[0.15em] text-white hover:text-primary transition-colors"
+          >Members</a
+        >
+        <a
+          href="#stats"
+          class="font-condensed text-sm font-semibold uppercase tracking-[0.15em] text-white hover:text-primary transition-colors"
+          >Stats</a
+        >
+      </div>
+      <!-- Mobile menu button on left for small screens where links are hidden -->
+      <button
+        id="mobile-menu-btn"
+        class="md:hidden flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:text-primary hover:bg-muted transition-all"
+        aria-label="Open menu"
+      >
+        <svg
+          class="h-5 w-5"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          ><line x1="4" y1="6" x2="20" y2="6"></line><line
+            x1="4"
+            y1="12"
+            x2="20"
+            y2="12"></line><line x1="4" y1="18" x2="20" y2="18"></line></svg
+        >
+      </button>
+    </div>
+
+    <!-- Center: Logo -->
+    <div
+      class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-center pointer-events-none"
+    >
+      <a href="#" class="flex items-center group pointer-events-auto">
+        <div
+          class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/20 border border-primary/30 group-hover:bg-primary/30 group-hover:border-primary transition-all shadow-[0_0_15px_rgba(var(--color-primary),0.1)]"
+        >
+          <svg
+            class="h-5 w-5 text-primary"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="22" y1="12" x2="18" y2="12"></line>
+            <line x1="6" y1="12" x2="2" y2="12"></line>
+            <line x1="12" y1="6" x2="12" y2="2"></line>
+            <line x1="12" y1="22" x2="12" y2="18"></line>
+          </svg>
+        </div>
+      </a>
+    </div>
+
+    <!-- Right: Social icons -->
+    <div class="flex-1 flex items-center justify-end gap-3">
+      <div class="hidden sm:flex items-center gap-3">
+        <a
+          href={CLAN.socials.discord}
+          target="_blank"
+          rel="noopener"
+          class="flex h-10 w-10 items-center justify-center rounded-lg text-muted-foreground hover:text-primary hover:bg-muted transition-all"
+          aria-label="Discord"
+        >
+          <svg
+            class="h-5 w-5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><path
+              d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+            ></path></svg
+          >
+        </a>
+        <a
+          href={CLAN.socials.instagram}
+          target="_blank"
+          rel="noopener"
+          class="flex h-10 w-10 items-center justify-center rounded-lg text-muted-foreground hover:text-primary hover:bg-muted transition-all"
+          aria-label="Instagram"
+        >
+          <svg
+            class="h-5 w-5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect><path
+              d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line
+              x1="17.5"
+              y1="6.5"
+              x2="17.51"
+              y2="6.5"></line></svg
+          >
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile Menu Overlay -->
+<div id="mobile-menu" class="fixed inset-0 z-[100] hidden">
+  <div
+    id="mobile-menu-backdrop"
+    class="absolute inset-0 bg-black/60 backdrop-blur-sm"
+  >
+  </div>
+  <div
+    id="mobile-menu-panel"
+    class="absolute right-0 top-0 h-full w-64 bg-card border-l border-border p-6 transform translate-x-full transition-transform duration-300 ease-out"
+  >
+    <button
+      id="mobile-menu-close"
+      class="mb-8 flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:text-primary hover:bg-muted transition-all"
+      aria-label="Close menu"
+    >
+      <svg
+        class="h-5 w-5"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        ><line x1="18" y1="6" x2="6" y2="18"></line><line
+          x1="6"
+          y1="6"
+          x2="18"
+          y2="18"></line></svg
+      >
+    </button>
+    <div class="flex flex-col gap-6">
+      <a
+        href="#hero"
+        class="mobile-nav-link font-condensed text-sm font-semibold uppercase tracking-[0.15em] text-white hover:text-primary transition-colors"
+        >Home</a
+      >
+      <a
+        href="#members"
+        class="mobile-nav-link font-condensed text-sm font-semibold uppercase tracking-[0.15em] text-white hover:text-primary transition-colors"
+        >Members</a
+      >
+      <a
+        href="#stats"
+        class="mobile-nav-link font-condensed text-sm font-semibold uppercase tracking-[0.15em] text-white hover:text-primary transition-colors"
+        >Stats</a
+      >
+      <div class="border-t border-border pt-6 flex gap-3">
+        <a
+          href={CLAN.socials.discord}
+          target="_blank"
+          rel="noopener"
+          class="flex h-10 w-10 items-center justify-center rounded-lg text-muted-foreground hover:text-primary hover:bg-muted transition-all border border-border"
+          aria-label="Discord"
+        >
+          <svg
+            class="h-4 w-4"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><path
+              d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+            ></path></svg
+          >
+        </a>
+        <a
+          href={CLAN.socials.instagram}
+          target="_blank"
+          rel="noopener"
+          class="flex h-10 w-10 items-center justify-center rounded-lg text-muted-foreground hover:text-primary hover:bg-muted transition-all border border-border"
+          aria-label="Instagram"
+        >
+          <svg
+            class="h-4 w-4"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect><path
+              d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line
+              x1="17.5"
+              y1="6.5"
+              x2="17.51"
+              y2="6.5"></line></svg
+          >
+        </a>
+        <a
+          href={CLAN.socials.youtube}
+          target="_blank"
+          rel="noopener"
+          class="flex h-10 w-10 items-center justify-center rounded-lg text-muted-foreground hover:text-primary hover:bg-muted transition-all border border-border"
+          aria-label="YouTube"
+        >
+          <svg
+            class="h-4 w-4"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><path d="m22 8-6 4 6 4V8Z"></path><rect
+              width="14"
+              height="12"
+              x="2"
+              y="6"
+              rx="2"
+              ry="2"></rect></svg
+          >
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const btn = document.getElementById("mobile-menu-btn");
+  const menu = document.getElementById("mobile-menu");
+  const panel = document.getElementById("mobile-menu-panel");
+  const closeBtn = document.getElementById("mobile-menu-close");
+  const backdrop = document.getElementById("mobile-menu-backdrop");
+  const links = document.querySelectorAll(".mobile-nav-link");
+
+  function openMenu() {
+    menu?.classList.remove("hidden");
+    requestAnimationFrame(() => {
+      panel?.classList.remove("translate-x-full");
+    });
+  }
+
+  function closeMenu() {
+    panel?.classList.add("translate-x-full");
+    setTimeout(() => menu?.classList.add("hidden"), 300);
+  }
+
+  btn?.addEventListener("click", openMenu);
+  closeBtn?.addEventListener("click", closeMenu);
+  backdrop?.addEventListener("click", closeMenu);
+  links.forEach((link) => link.addEventListener("click", closeMenu));
+</script>

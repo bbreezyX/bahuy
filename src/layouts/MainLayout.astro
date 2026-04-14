@@ -1,0 +1,68 @@
+---
+import "../styles/globals.css";
+import { CLAN } from "../data/clan";
+---
+
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content={`${CLAN.name} — ${CLAN.subtitle}. ${CLAN.motto}`}
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{CLAN.name} | {CLAN.subtitle}</title>
+  </head>
+  <body class="min-h-screen overflow-x-hidden">
+    <!-- Corridor grid background -->
+    <div class="corridor-grid" aria-hidden="true">
+      <div class="corridor-grid__left"></div>
+      <div class="corridor-grid__right"></div>
+    </div>
+
+    <div class="relative z-10">
+      <slot />
+    </div>
+  </body>
+</html>
+
+<style>
+  .corridor-grid {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    perspective: 600px;
+    overflow: hidden;
+  }
+
+  .corridor-grid__left,
+  .corridor-grid__right {
+    position: absolute;
+    top: -20%;
+    width: 42%;
+    height: 140%;
+    background-image:
+      linear-gradient(to right, rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  .corridor-grid__left {
+    left: 0;
+    transform-origin: left center;
+    transform: rotateY(35deg);
+    mask-image: linear-gradient(to right, black 10%, transparent 70%);
+    -webkit-mask-image: linear-gradient(to right, black 10%, transparent 70%);
+  }
+
+  .corridor-grid__right {
+    right: 0;
+    transform-origin: right center;
+    transform: rotateY(-35deg);
+    mask-image: linear-gradient(to left, black 10%, transparent 70%);
+    -webkit-mask-image: linear-gradient(to left, black 10%, transparent 70%);
+  }
+</style>

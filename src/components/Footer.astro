@@ -1,0 +1,109 @@
+---
+import { CLAN } from "../data/clan";
+---
+
+<footer class="border-t border-border bg-background py-10 md:py-12">
+  <div
+    class="mx-auto max-w-[1280px] px-4 md:px-6 lg:px-8 flex flex-col items-center gap-5"
+  >
+    <!-- Logo -->
+    <div
+      class="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 border border-primary/20"
+    >
+      <svg
+        class="h-5 w-5 text-muted-foreground"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="22" y1="12" x2="18" y2="12"></line>
+        <line x1="6" y1="12" x2="2" y2="12"></line>
+        <line x1="12" y1="6" x2="12" y2="2"></line>
+        <line x1="12" y1="22" x2="12" y2="18"></line>
+      </svg>
+    </div>
+
+    <!-- Copyright -->
+    <p
+      class="font-condensed text-[11px] uppercase tracking-[0.2em] text-muted-foreground text-center"
+    >
+      &copy; {new Date().getFullYear()}
+      {CLAN.name} — All Rights Reserved
+    </p>
+
+    <!-- Social Icons -->
+    <div class="flex items-center gap-3">
+      <a
+        href={CLAN.socials.instagram}
+        target="_blank"
+        rel="noopener"
+        class="flex h-9 w-9 items-center justify-center rounded-lg border border-border text-muted-foreground hover:text-primary hover:border-primary/40 transition-all"
+        aria-label="Instagram"
+      >
+        <svg
+          class="h-4 w-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          ><rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect><path
+            d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line
+            x1="17.5"
+            y1="6.5"
+            x2="17.51"
+            y2="6.5"></line></svg
+        >
+      </a>
+      <a
+        href={CLAN.socials.discord}
+        target="_blank"
+        rel="noopener"
+        class="flex h-9 w-9 items-center justify-center rounded-lg border border-border text-muted-foreground hover:text-primary hover:border-primary/40 transition-all"
+        aria-label="Discord"
+      >
+        <svg
+          class="h-4 w-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          ><path
+            d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+          ></path></svg
+        >
+      </a>
+      <a
+        href={CLAN.socials.youtube}
+        target="_blank"
+        rel="noopener"
+        class="flex h-9 w-9 items-center justify-center rounded-lg border border-border text-muted-foreground hover:text-primary hover:border-primary/40 transition-all"
+        aria-label="YouTube"
+      >
+        <svg
+          class="h-4 w-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          ><path d="m22 8-6 4 6 4V8Z"></path><rect
+            width="14"
+            height="12"
+            x="2"
+            y="6"
+            rx="2"
+            ry="2"></rect></svg
+        >
+      </a>
+    </div>
+  </div>
+</footer>

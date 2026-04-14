@@ -1,0 +1,93 @@
+---
+import { CLAN } from "../data/clan";
+import { members } from "../data/members";
+import HeroCards from "./HeroCards";
+
+const featuredMembers = members.filter((m) => m.isFeatured).slice(0, 5);
+---
+
+<section
+  id="hero"
+  class="relative overflow-x-clip min-h-[calc(100dvh-80px)] flex flex-col items-center justify-center pt-12 md:pt-20 pb-2 md:pb-8"
+>
+  <!-- Camo blob decorations -->
+  <div
+    class="absolute top-20 left-10 w-64 h-64 rounded-full bg-secondary/[0.04] blur-3xl pointer-events-none"
+  >
+  </div>
+  <div
+    class="absolute bottom-10 right-20 w-96 h-96 rounded-full bg-secondary/[0.03] blur-3xl pointer-events-none"
+  >
+  </div>
+  <div
+    class="absolute top-40 right-10 w-48 h-48 rounded-full bg-primary/[0.03] blur-3xl pointer-events-none"
+  >
+  </div>
+
+  <div
+    class="relative w-full max-w-[1280px] px-4 md:px-6 lg:px-8 flex flex-col justify-between items-center flex-1"
+  >
+    <div class="w-full flex-1 flex flex-col justify-center mt-6">
+      <!-- Clan Name styled like reference image -->
+      <div class="flex flex-col items-center mb-4 animate-slide-up w-full">
+        <h1
+          class="font-display text-center leading-[0.8] text-white uppercase select-none drop-shadow-2xl"
+        >
+          <span
+            class="block text-[5rem] sm:text-[7.5rem] md:text-[9rem] lg:text-[11.5rem] xl:text-[14rem] tracking-tighter"
+          >
+            BAHUY.
+          </span>
+          <span
+            class="block text-[2.5rem] sm:text-[3.5rem] md:text-[4.5rem] lg:text-[5.5rem] xl:text-[6.5rem] tracking-[0.2em] text-white -mt-2 md:-mt-4"
+          >
+            N FRIENDS
+          </span>
+        </h1>
+      </div>
+
+      <!-- Motto -->
+      <p
+        class="text-xs md:text-sm italic text-muted-foreground text-center mb-6 md:mb-10 animate-fade-in-delay"
+        style="font-family: var(--font-body);"
+      >
+        "{CLAN.motto}"
+      </p>
+    </div>
+
+    <!-- Fan-spread hero cards (at the bottom) -->
+    <div class="flex justify-center overflow-visible w-full mt-auto">
+      <HeroCards members={featuredMembers} client:visible />
+    </div>
+  </div>
+</section>
+
+<style>
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .animate-fade-in {
+    animation: fadeIn 0.8s ease-out both;
+  }
+  .animate-slide-up {
+    animation: slideUp 0.8s ease-out 0.1s both;
+  }
+  .animate-fade-in-delay {
+    animation: fadeIn 0.8s ease-out 0.3s both;
+  }
+</style>
