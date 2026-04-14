@@ -163,7 +163,12 @@ function MagicCard({
 
 export default function HeroCards({ members }: HeroCardsProps) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [mobileActiveIndex, setMobileActiveIndex] = useState<number | null>(null);
   const hoverTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleMobileTap = useCallback((index: number) => {
+    setMobileActiveIndex((prev) => (prev === index ? null : index));
+  }, []);
 
   const handleHover = useCallback((index: number) => {
     if (hoverTimer.current) clearTimeout(hoverTimer.current);
@@ -298,8 +303,18 @@ export default function HeroCards({ members }: HeroCardsProps) {
       {/* Mobile compact fan-spread */}
       <div className="md:hidden flex items-end justify-center relative h-[330px] w-full overflow-visible">
         {members.slice(0, 3).map((member, i) => {
-          const pos = mobileFanPositions[i] || mobileFanPositions[1];
           const colors = cardColors[i % cardColors.length];
+          const isMobileActive = mobileActiveIndex === i;
+          // When a card is tapped, roulette to center (slot 1)
+          const getMobilePos = () => {
+            if (mobileActiveIndex === null) return mobileFanPositions[i] || mobileFanPositions[1];
+            const offset = mobileActiveIndex - 1;
+            let slot = i - offset;
+            const len = mobileFanPositions.length;
+            slot = ((slot % len) + len) % len;
+            return mobileFanPositions[slot];
+          };
+          const pos = getMobilePos();
           return (
             <motion.div
               key={member.nickname}
@@ -307,28 +322,19 @@ export default function HeroCards({ members }: HeroCardsProps) {
               initial={false}
               animate={{
                 opacity: 1,
-                y: pos.y,
+                y: isMobileActive ? pos.y - 20 : pos.y,
                 rotate: pos.rotate,
                 x: pos.x,
-                scale: pos.scale,
-                zIndex: pos.z,
+                scale: isMobileActive ? 1.06 : pos.scale,
+                zIndex: isMobileActive ? 50 : pos.z,
                 transition: {
                   type: "spring",
                   stiffness: 300,
                   damping: 25,
-                  zIndex: { delay: 0.15 },
+                  zIndex: { delay: isMobileActive ? 0 : 0.15 },
                 },
               }}
-              whileHover={{
-                y: pos.y - 20,
-                scale: 1.08,
-                zIndex: 50,
-                transition: {
-                  type: "spring",
-                  stiffness: 400,
-                  damping: 20,
-                },
-              }}
+              onTap={() => handleMobileTap(i)}
               style={{
                 transformOrigin: "bottom center",
               }}
