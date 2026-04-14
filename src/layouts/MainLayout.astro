@@ -46,11 +46,9 @@ import { CLAN } from "../data/clan";
 
     <!-- Decorative character images -->
     <div class="char-deco char-deco--left" aria-hidden="true">
-      <div class="char-glow"></div>
       <img src="/cha01.png" alt="" draggable="false" />
     </div>
     <div class="char-deco char-deco--right" aria-hidden="true">
-      <div class="char-glow"></div>
       <img src="/cha02.png" alt="" draggable="false" />
     </div>
 
@@ -143,30 +141,6 @@ import { CLAN } from "../data/clan";
     animation: char-float-right 7s ease-in-out infinite;
   }
 
-  /* Ambient glow beneath characters */
-  .char-glow {
-    position: absolute;
-    bottom: -5%;
-    left: 50%;
-    translate: -50% 0;
-    width: 70%;
-    height: 30%;
-    border-radius: 50%;
-    z-index: 0;
-    opacity: 0;
-    filter: blur(60px);
-  }
-
-  .char-deco--left .char-glow {
-    background: radial-gradient(ellipse, rgba(196, 162, 101, 0.25), transparent 70%);
-    animation: glow-pulse 5s ease-in-out 1s infinite;
-  }
-
-  .char-deco--right .char-glow {
-    background: radial-gradient(ellipse, rgba(140, 120, 180, 0.2), transparent 70%);
-    animation: glow-pulse 6s ease-in-out 2s infinite;
-  }
-
   @keyframes char-float-left {
     0%, 100% { transform: translateY(0) rotate(0deg); }
     50% { transform: translateY(-10px) rotate(-0.4deg); }
@@ -177,11 +151,6 @@ import { CLAN } from "../data/clan";
     50% { transform: translateY(-8px) rotate(0.3deg); }
   }
 
-  @keyframes glow-pulse {
-    0%, 100% { opacity: 0.3; transform: scale(1); }
-    50% { opacity: 0.7; transform: scale(1.1); }
-  }
-
   @media (min-width: 1024px) {
     .char-deco {
       display: block;
@@ -190,8 +159,7 @@ import { CLAN } from "../data/clan";
 
   @media (prefers-reduced-motion: reduce) {
     .char-deco--left img,
-    .char-deco--right img,
-    .char-glow {
+    .char-deco--right img {
       animation: none;
     }
   }

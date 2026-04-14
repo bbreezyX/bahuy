@@ -397,35 +397,37 @@ export default function MemberGrid({ members }: MemberGridProps) {
         {/* ── Filters + Search + Nav ── */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-5 mb-10">
           {/* Role filter pills */}
-          <div className="flex items-center gap-2 flex-wrap">
-            {roles.map((role) => {
-              const isActive = activeRole === role.value;
-              return (
-                <motion.button
-                  key={role.value}
-                  onClick={() => setActiveRole(role.value)}
-                  whileTap={{ scale: 0.96 }}
-                  className="relative whitespace-nowrap rounded-full px-6 py-3 text-sm font-[var(--font-condensed)] uppercase tracking-[0.15em] font-medium border cursor-pointer"
-                  style={{
-                    borderColor: isActive ? "transparent" : "rgba(255,255,255,0.20)",
-                    color: isActive ? "#ffffff" : "rgba(255,255,255,0.65)",
-                    transition: "color 0.25s ease, border-color 0.25s ease",
-                  }}
-                >
-                  {isActive && (
-                    <motion.span
-                      layoutId="activeRolePill"
-                      className="absolute inset-0 rounded-full overflow-hidden"
-                      style={{ backgroundColor: role.color }}
-                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                    />
-                  )}
-                  <span className="relative z-10">
-                    {role.label}
-                  </span>
-                </motion.button>
-              );
-            })}
+          <div className="w-full md:w-auto overflow-x-auto scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0">
+            <div className="flex items-center gap-1.5 sm:gap-2 w-max md:w-auto">
+              {roles.map((role) => {
+                const isActive = activeRole === role.value;
+                return (
+                  <motion.button
+                    key={role.value}
+                    onClick={() => setActiveRole(role.value)}
+                    whileTap={{ scale: 0.96 }}
+                    className="relative whitespace-nowrap rounded-full px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm font-[var(--font-condensed)] uppercase tracking-[0.15em] font-medium border cursor-pointer"
+                    style={{
+                      borderColor: isActive ? "transparent" : "rgba(255,255,255,0.20)",
+                      color: isActive ? "#ffffff" : "rgba(255,255,255,0.65)",
+                      transition: "color 0.25s ease, border-color 0.25s ease",
+                    }}
+                  >
+                    {isActive && (
+                      <motion.span
+                        layoutId="activeRolePill"
+                        className="absolute inset-0 rounded-full overflow-hidden"
+                        style={{ backgroundColor: role.color }}
+                        transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                      />
+                    )}
+                    <span className="relative z-10">
+                      {role.label}
+                    </span>
+                  </motion.button>
+                );
+              })}
+            </div>
           </div>
 
           <div className="flex items-center gap-3">

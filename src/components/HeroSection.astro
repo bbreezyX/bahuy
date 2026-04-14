@@ -13,19 +13,25 @@ const featuredMembers = members.filter((m) => m.isFeatured).slice(0, 5);
   <div
     class="relative w-full max-w-[1280px] px-4 md:px-6 lg:px-8 flex flex-col items-center flex-1 justify-center md:justify-between gap-6 md:gap-0"
   >
-    <div class="w-full flex flex-col items-center md:flex-1 md:justify-center mt-0 md:mt-6">
+    <div
+      class="w-full flex flex-col items-center md:flex-1 md:justify-center mt-0 md:mt-6"
+    >
       <!-- Mobile hero character -->
-      <div class="sm:hidden flex justify-center animate-fade-in mb-[-2rem]">
-        <img
-          src="/cha3.png"
-          alt=""
-          draggable="false"
-          class="hero-char-mobile"
-        />
+      <div class="sm:hidden flex justify-center mb-[-2rem]">
+        <div class="hero-char-mobile-wrapper">
+          <img
+            src="/cha3.png"
+            alt=""
+            draggable="false"
+            class="hero-char-mobile"
+          />
+        </div>
       </div>
 
       <!-- Clan Name -->
-      <div class="flex flex-col items-center mb-6 md:mb-10 w-full animate-slide-up">
+      <div
+        class="flex flex-col items-center mb-6 md:mb-10 w-full animate-slide-up"
+      >
         {/* Subtitle tag above name */}
         <div class="hero-subtitle mb-4 md:mb-5">
           <span
@@ -38,15 +44,8 @@ const featuredMembers = members.filter((m) => m.isFeatured).slice(0, 5);
         <h1
           class="hero-title relative text-center leading-[0.8] text-white uppercase select-none"
         >
-          {/* Ghost text behind for depth */}
           <span
-            class="hero-ghost absolute inset-0 font-display text-[5rem] sm:text-[7.5rem] md:text-[9rem] lg:text-[11.5rem] xl:text-[14rem] tracking-tighter text-white/[0.03] select-none pointer-events-none scale-[1.02] blur-[1px]"
-            aria-hidden="true"
-          >
-            BAHUY.
-          </span>
-          <span
-            class="block font-display text-[5rem] sm:text-[7.5rem] md:text-[9rem] lg:text-[11.5rem] xl:text-[14rem] tracking-tighter drop-shadow-[0_4px_60px_rgba(196,162,101,0.12)]"
+            class="block font-display text-[5rem] sm:text-[7.5rem] md:text-[9rem] lg:text-[11.5rem] xl:text-[14rem] tracking-tighter"
           >
             BAHUY.
           </span>
@@ -75,12 +74,22 @@ const featuredMembers = members.filter((m) => m.isFeatured).slice(0, 5);
 
 <style>
   @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
   }
   @keyframes slideUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   .animate-fade-in {
@@ -96,19 +105,66 @@ const featuredMembers = members.filter((m) => m.isFeatured).slice(0, 5);
   .hero-title {
     animation: slideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
   }
-  .hero-ghost {
-    animation: fadeIn 1.2s ease-out 0.4s both;
-  }
   .hero-motto {
     animation: fadeIn 0.8s ease-out 0.5s both;
   }
 
+  /* Mobile hero character animations */
+  @keyframes heroEntrance {
+    0% {
+      opacity: 0;
+      transform: translateY(60px) scale(0.9);
+      filter: brightness(0.3) blur(6px);
+    }
+    50% {
+      opacity: 0.8;
+      filter: brightness(0.6) blur(2px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      filter: brightness(0.85) blur(0);
+    }
+  }
+
+  @keyframes heroFloat {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  @keyframes heroBreath {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.02);
+    }
+  }
+
+  .hero-char-mobile-wrapper {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    animation: heroEntrance 1s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+  }
+
   .hero-char-mobile {
-    width: 280px;
+    position: relative;
+    z-index: 1;
+    width: 360px;
     height: auto;
     pointer-events: none;
-    filter: brightness(0.8);
-    mask-image: linear-gradient(to bottom, black 50%, transparent 95%);
-    -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 95%);
+    filter: brightness(0.85);
+    mask-image: linear-gradient(to bottom, black 55%, transparent 95%);
+    -webkit-mask-image: linear-gradient(to bottom, black 55%, transparent 95%);
+    animation:
+      heroFloat 4s ease-in-out 1.2s infinite,
+      heroBreath 6s ease-in-out 1.2s infinite;
   }
 </style>
