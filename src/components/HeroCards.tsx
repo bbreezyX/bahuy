@@ -2,20 +2,33 @@ import { motion } from "motion/react";
 import { useState, useRef, useCallback, useEffect, useMemo } from "react";
 import type { Member } from "@/data/members";
 import AvatarIcon from "./AvatarIcon";
+import CardFrame from "./CardFrame";
 
 interface HeroCardsProps {
   members: Member[];
 }
 
-const cardColors = [
-  { bg: "#2B3544", light: "#3E4D62", glow: "rgba(62, 77, 98, 0.6)" },    // gunmetal
-  { bg: "#1B4D6E", light: "#2A6B96", glow: "rgba(42, 107, 150, 0.6)" },  // steel blue
-  { bg: "#1A5C3A", light: "#258050", glow: "rgba(37, 128, 80, 0.6)" },   // tactical green
-  { bg: "#5C3A1A", light: "#7A5228", glow: "rgba(122, 82, 40, 0.6)" },   // bronze
-  { bg: "#3A2B4A", light: "#54406A", glow: "rgba(84, 64, 106, 0.6)" },   // slate purple
-];
+const roleBg: Record<string, string> = {
+  sniper: "#8B2020",
+  rusher: "#C86A1A",
+  support: "#2563A8",
+  medic: "#1F7A45",
+};
 
-// Measure an element's width reactively
+const roleBgLight: Record<string, string> = {
+  sniper: "#A83030",
+  rusher: "#E08030",
+  support: "#3B82C6",
+  medic: "#2D9958",
+};
+
+const roleLabel: Record<string, string> = {
+  sniper: "SHARPSHOOTER",
+  rusher: "ASSAULT",
+  support: "TACTICAL",
+  medic: "FIELD MEDIC",
+};
+
 function useElementWidth(ref: React.RefObject<HTMLDivElement | null>) {
   const [width, setWidth] = useState(900);
   useEffect(() => {
@@ -27,118 +40,166 @@ function useElementWidth(ref: React.RefObject<HTMLDivElement | null>) {
   return width;
 }
 
-// Compute 5-card fan positions so outermost cards stay within the container width
-function computeDesktopFan(containerW: number, cardW = 260) {
-  // Max safe half-spread: half-container minus half-card minus a small margin
-  const halfSpread = Math.max((containerW / 2) - (cardW / 2) - 16, 80);
+/* ── Fan position calculators ── */
+
+function computeDesktopFan(containerW: number) {
+  const cardW = 260;
+  const halfSpread = Math.max((containerW / 2) - (cardW / 2) - 8, 100);
   const step = halfSpread / 2;
   return [
-    { rotate: -22, x: -step * 2, y: 30, z: 1, scale: 0.85 },
-    { rotate: -10, x: -step,     y: 10, z: 2, scale: 0.92 },
-    { rotate:   0, x:  0,        y: -16, z: 5, scale: 1    },
-    { rotate:  10, x:  step,     y: 10, z: 2, scale: 0.92 },
-    { rotate:  22, x:  step * 2, y: 30, z: 1, scale: 0.85 },
+    { rotate: -18, x: -step * 2, y: 28, z: 1, scale: 0.88 },
+    { rotate:  -8, x: -step,     y: 8,  z: 2, scale: 0.94 },
+    { rotate:   0, x:  0,        y: -12, z: 5, scale: 1    },
+    { rotate:   8, x:  step,     y: 8,  z: 2, scale: 0.94 },
+    { rotate:  18, x:  step * 2, y: 28, z: 1, scale: 0.88 },
   ];
 }
 
-// Compute 3-card mobile fan positions — center card dominant, sides overflow edges
-function computeMobileFan(containerW: number, cardW = 240) {
-  const spread = Math.max((containerW / 2) + 20, 120);
+function computeMobileFan(containerW: number) {
+  const spread = Math.max((containerW / 2) + 10, 110);
   return [
-    { rotate: -14, x: -spread, y: 30, z: 1, scale: 0.88 },
-    { rotate:   0, x:  0,      y: -10, z: 5, scale: 1    },
-    { rotate:  14, x:  spread, y: 30, z: 1, scale: 0.88 },
+    { rotate: -12, x: -spread, y: 24, z: 1, scale: 0.9 },
+    { rotate:   0, x:  0,      y: -8, z: 5, scale: 1   },
+    { rotate:  12, x:  spread, y: 24, z: 1, scale: 0.9 },
   ];
 }
 
+/* ── Tilt wrapper ── */
 
-/* Card shape path generator — creates the notched card outline */
-function cardShapePath(w: number, h: number, notchY = 0.68) {
-  const r = 18;       // corner radius
-  const ny = h * notchY; // notch Y position
-  const nd = 6;       // notch depth (how far inward)
-  const nr = 8;       // notch curve radius
-  return `M ${r},0 L ${w - r},0 Q ${w},0 ${w},${r} L ${w},${ny - nr} C ${w},${ny - 2} ${w - nd},${ny - 2} ${w - nd},${ny} C ${w - nd},${ny + 2} ${w},${ny + 2} ${w},${ny + nr} L ${w},${h - r} Q ${w},${h} ${w - r},${h} L ${r},${h} Q 0,${h} 0,${h - r} L 0,${ny + nr} C 0,${ny + 2} ${nd},${ny + 2} ${nd},${ny} C ${nd},${ny - 2} 0,${ny - 2} 0,${ny - nr} L 0,${r} Q 0,0 ${r},0 Z`;
-}
-
-/* Shaped gaming card with notch cutouts */
-function GameCard({
-  children,
-  w,
-  h,
-  glowColor,
-  className,
-}: {
-  children: (shapePath: string) => React.ReactNode;
-  w: number;
-  h: number;
-  glowColor: string;
-  className?: string;
-}) {
+function TiltCard({ children }: { children: React.ReactNode }) {
   const cardRef = useRef<HTMLDivElement>(null);
   const [mousePos, setMousePos] = useState({ x: 0.5, y: 0.5 });
   const [isHovered, setIsHovered] = useState(false);
-  const shapePath = useMemo(() => cardShapePath(w, h), [w, h]);
 
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
-    setMousePos({ x: (e.clientX - rect.left) / rect.width, y: (e.clientY - rect.top) / rect.height });
+    setMousePos({
+      x: (e.clientX - rect.left) / rect.width,
+      y: (e.clientY - rect.top) / rect.height,
+    });
   }, []);
 
-  const tiltX = isHovered ? (mousePos.y - 0.5) * -20 : 0;
-  const tiltY = isHovered ? (mousePos.x - 0.5) * 20 : 0;
+  const tiltX = isHovered ? (mousePos.y - 0.5) * -12 : 0;
+  const tiltY = isHovered ? (mousePos.x - 0.5) * 12 : 0;
 
   return (
     <div
       ref={cardRef}
-      className={`${className || ""} relative group`}
+      className="relative group"
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => { setIsHovered(false); setMousePos({ x: 0.5, y: 0.5 }); }}
       style={{
-        width: w,
-        height: h,
-        transform: `perspective(600px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`,
-        transition: isHovered ? "transform 0.1s ease-out" : "transform 0.4s ease-out",
+        transform: `perspective(800px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`,
+        transition: isHovered ? "transform 0.1s ease-out" : "transform 0.35s ease-out",
+        willChange: "transform",
       }}
     >
-      {/* Clipped content */}
-      <div className="absolute inset-0" style={{ clipPath: `path('${shapePath}')` }}>
-        {children(shapePath)}
-      </div>
-
-      {/* SVG border outline */}
-      <svg className="absolute inset-0 w-full h-full pointer-events-none z-10" viewBox={`0 0 ${w} ${h}`}>
-        <path d={shapePath} stroke="rgba(255,255,255,0.14)" strokeWidth="3" fill="none" />
-      </svg>
-
-      {/* Shimmer overlay */}
+      {children}
+      {/* Shimmer */}
       <div
-        className="absolute inset-0 pointer-events-none z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        className="absolute inset-0 pointer-events-none z-30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg"
         style={{
-          clipPath: `path('${shapePath}')`,
-          background: `radial-gradient(circle at ${mousePos.x * 100}% ${mousePos.y * 100}%, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.06) 30%, transparent 60%)`,
+          background: `radial-gradient(circle at ${mousePos.x * 100}% ${mousePos.y * 100}%, rgba(255,255,255,0.10) 0%, transparent 50%)`,
           mixBlendMode: "overlay",
         }}
       />
-
-      {/* Glow on hover */}
-      <svg className="absolute inset-0 w-full h-full pointer-events-none z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" viewBox={`0 0 ${w} ${h}`}>
-        <path d={shapePath} stroke={glowColor} strokeWidth="4" fill="none" style={{ filter: `drop-shadow(0 0 12px ${glowColor})` }} />
-      </svg>
     </div>
   );
 }
 
+/* ── Hero card (same style as MemberCard, with CardFrame SVG) ── */
+
+function HeroCard({ member }: { member: Member }) {
+  const bg = roleBg[member.role] || "#C4A265";
+  const bgLight = roleBgLight[member.role] || "#D4B275";
+  const hasAvatar = !!member.avatar;
+
+  return (
+    <div className="hero-card relative overflow-hidden bg-[#0e1112] rounded-lg">
+      {/* Portrait content (behind frame) */}
+      <div className="absolute inset-0 z-10">
+        {hasAvatar ? (
+          <img
+            src={member.avatar}
+            alt={member.nickname}
+            className="absolute inset-0 w-full h-full object-cover object-top"
+            loading="eager"
+            decoding="async"
+          />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center bg-[#141819]">
+            <div className="relative w-[65%] h-[70%] flex items-center justify-center">
+              <div className="absolute inset-0 rounded-sm border border-white/[0.08]" />
+              <div className="absolute inset-[3px] rounded-sm border border-white/[0.05]" />
+              <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 120" fill="none" preserveAspectRatio="none">
+                <path d="M0 12 L0 0 L12 0" stroke="white" strokeOpacity="0.15" strokeWidth="1.5" />
+                <path d="M88 0 L100 0 L100 12" stroke="white" strokeOpacity="0.15" strokeWidth="1.5" />
+                <path d="M100 108 L100 120 L88 120" stroke="white" strokeOpacity="0.15" strokeWidth="1.5" />
+                <path d="M12 120 L0 120 L0 108" stroke="white" strokeOpacity="0.15" strokeWidth="1.5" />
+              </svg>
+              <svg className="w-[55%] text-white/[0.08]" viewBox="0 0 64 80" fill="currentColor">
+                <circle cx="32" cy="22" r="12" />
+                <path d="M10 72c0-14 10-26 22-26s22 12 22 26" />
+              </svg>
+            </div>
+          </div>
+        )}
+
+        {/* Bottom gradient for text readability */}
+        <div
+          className="absolute bottom-0 left-0 right-0 h-[45%] pointer-events-none"
+          style={{ background: "linear-gradient(to top, rgba(14,17,18,0.95) 0%, rgba(14,17,18,0.7) 40%, transparent 100%)" }}
+        />
+      </div>
+
+      {/* SVG tech frame */}
+      <CardFrame accent="#f9c651" bgFill={hasAvatar ? undefined : bg} hasAvatar={hasAvatar} />
+
+      {/* Role tag top-left */}
+      <div className="absolute top-[7%] left-[8%] z-30">
+        <span
+          className="inline-block font-[var(--font-condensed)] text-[8px] sm:text-[9px] uppercase tracking-[0.2em] px-2 py-0.5 text-white/80"
+          style={{ backgroundColor: "rgba(0,0,0,0.5)", backdropFilter: "blur(4px)" }}
+        >
+          {roleLabel[member.role] || member.role}
+        </span>
+      </div>
+
+      {/* Leader crown badge */}
+      {member.isLeader && (
+        <div className="absolute top-[6%] right-[8%] z-30 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-yellow-500 flex items-center justify-center shadow-lg">
+          <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-yellow-900" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z" />
+          </svg>
+        </div>
+      )}
+
+      {/* Name area at bottom */}
+      <div className="absolute bottom-0 left-0 right-0 z-30 px-[8%] pb-[6%]">
+        <h3 className="font-display text-base sm:text-lg lg:text-xl text-white leading-tight tracking-wide truncate text-center">
+          {member.nickname}
+        </h3>
+        <p
+          className="text-[9px] sm:text-[10px] text-white/40 truncate mt-0.5 text-center"
+          style={{ fontFamily: "var(--font-body)" }}
+        >
+          {member.name}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+/* ── Main component ── */
+
 export default function HeroCards({ members }: HeroCardsProps) {
-  // Refs to measure actual rendered container width
   const desktopRef = useRef<HTMLDivElement>(null);
   const mobileRef  = useRef<HTMLDivElement>(null);
   const desktopW   = useElementWidth(desktopRef);
   const mobileW    = useElementWidth(mobileRef);
 
-  // Dynamic fan positions — recomputed whenever container width changes
   const fanPositions       = useMemo(() => computeDesktopFan(desktopW), [desktopW]);
   const mobileFanPositions = useMemo(() => computeMobileFan(mobileW),   [mobileW]);
 
@@ -149,8 +210,6 @@ export default function HeroCards({ members }: HeroCardsProps) {
     setMobileActiveIndex((prev) => (prev === index ? null : index));
   }, []);
 
-  // Roulette: click a card → whole fan rotates so that card goes to center slot.
-  // Click the same card again to reset.
   const handleDesktopClick = useCallback((index: number) => {
     setSelectedIndex((prev) => (prev === index ? null : index));
   }, []);
@@ -169,11 +228,10 @@ export default function HeroCards({ members }: HeroCardsProps) {
       {/* Desktop fan-spread */}
       <div
         ref={desktopRef}
-        className="hidden md:flex items-end justify-center relative h-[380px] w-full max-w-[1000px] overflow-visible"
+        className="hidden md:flex items-end justify-center relative h-[440px] w-full max-w-[1100px] overflow-visible"
       >
         {members.map((member, i) => {
           const pos = getDesktopPos(i);
-          const colors = cardColors[i % cardColors.length];
           const isCentered = selectedIndex === i;
           return (
             <motion.div
@@ -182,81 +240,33 @@ export default function HeroCards({ members }: HeroCardsProps) {
               initial={false}
               animate={{
                 opacity: 1,
-                y: isCentered ? pos.y - 5 : pos.y,
+                y: isCentered ? pos.y - 6 : pos.y,
                 rotate: pos.rotate,
                 x: pos.x,
-                scale: isCentered ? 1.05 : pos.scale,
+                scale: isCentered ? 1.06 : pos.scale,
                 zIndex: isCentered ? 50 : pos.z,
                 transition: {
                   type: "spring",
-                  stiffness: 300,
-                  damping: 25,
+                  stiffness: 280,
+                  damping: 26,
                   zIndex: { delay: isCentered ? 0 : 0.15 },
-                }
+                },
               }}
               onClick={() => handleDesktopClick(i)}
-              style={{
-                transformOrigin: "bottom center",
-              }}
+              style={{ transformOrigin: "bottom center" }}
             >
-              <GameCard w={260} h={360} glowColor={colors.glow}>
-                {() => (
-                  <div className="w-full h-full flex flex-col shadow-2xl shadow-black/50">
-                    {/* Visual area — colored bg with monogram */}
-                    <div
-                      className="relative flex flex-col items-center justify-center flex-1"
-                      style={{ backgroundColor: colors.bg }}
-                    >
-                      {/* K/D badge + Role tag at top */}
-                      <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-10">
-                        <div className="flex items-center gap-1.5 rounded-full px-3 py-1 shadow-lg" style={{ backgroundColor: colors.light }}>
-                          <svg className="w-3 h-3 text-yellow-300" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                          </svg>
-                          <span className="font-display text-sm text-white">
-                            {member.kdRatio.toFixed(1)}
-                          </span>
-                        </div>
-                        <span
-                          className="rounded-full px-3 py-1 font-[var(--font-condensed)] text-[10px] uppercase tracking-[0.15em] text-white/80 font-medium"
-                          style={{ backgroundColor: 'rgba(0,0,0,0.3)' }}
-                        >
-                          {member.role === "sniper" ? "Sharpshooter" : member.role === "rusher" ? "Assault" : member.role === "support" ? "Tactical" : "Field Medic"}
-                        </span>
-                      </div>
-
-                      <div className="absolute w-36 h-36 rounded-full border border-white/[0.07]" />
-                      <div className="absolute w-52 h-52 rounded-full border border-white/[0.04]" />
-
-                      <div className="relative w-24 h-24 rounded-full bg-white/10 border-2 border-white/20 flex items-center justify-center p-3">
-                        <AvatarIcon nickname={member.nickname} className="w-full h-full text-white/80" />
-                      </div>
-                    </div>
-
-                    {/* Info panel — bottom section */}
-                    <div className="bg-[#F5F5F5] px-5 py-4 flex flex-col items-center text-center">
-                      <h3 className="font-display text-2xl text-[#111] leading-none tracking-wide">
-                        {member.nickname}
-                      </h3>
-
-                      <p className="text-xs text-[#666] mt-1.5" style={{ fontFamily: "var(--font-body)" }}>
-                        {member.name} · {member.rank}
-                      </p>
-                    </div>
-                  </div>
-                )}
-              </GameCard>
+              <TiltCard>
+                <HeroCard member={member} />
+              </TiltCard>
             </motion.div>
           );
         })}
       </div>
 
       {/* Mobile compact fan-spread */}
-      <div ref={mobileRef} className="md:hidden flex items-end justify-center relative h-[370px] w-full overflow-visible">
+      <div ref={mobileRef} className="md:hidden flex items-end justify-center relative h-[380px] w-full overflow-visible">
         {members.slice(0, 3).map((member, i) => {
-          const colors = cardColors[i % cardColors.length];
           const isMobileActive = mobileActiveIndex === i;
-          // When a card is tapped, roulette to center (slot 1)
           const getMobilePos = () => {
             if (mobileActiveIndex === null) return mobileFanPositions[i] || mobileFanPositions[1];
             const offset = mobileActiveIndex - 1;
@@ -280,67 +290,38 @@ export default function HeroCards({ members }: HeroCardsProps) {
                 zIndex: isMobileActive ? 50 : pos.z,
                 transition: {
                   type: "spring",
-                  stiffness: 300,
-                  damping: 25,
+                  stiffness: 280,
+                  damping: 26,
                   zIndex: { delay: isMobileActive ? 0 : 0.15 },
                 },
               }}
               onTap={() => handleMobileTap(i)}
-              style={{
-                transformOrigin: "bottom center",
-              }}
+              style={{ transformOrigin: "bottom center" }}
             >
-              <GameCard w={240} h={340} glowColor={colors.glow}>
-                {() => (
-                  <div className="w-full h-full flex flex-col shadow-2xl shadow-black/50">
-                    {/* Visual area */}
-                    <div
-                      className="relative flex flex-col items-center justify-center flex-1"
-                      style={{ backgroundColor: colors.bg }}
-                    >
-                      {/* K/D badge + Role tag at top */}
-                      <div className="absolute top-3.5 left-3.5 right-3.5 flex items-center justify-between z-10">
-                        <div className="flex items-center gap-1 rounded-full px-2.5 py-0.5 shadow-lg" style={{ backgroundColor: colors.light }}>
-                          <svg className="w-2.5 h-2.5 text-yellow-300" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                          </svg>
-                          <span className="font-display text-xs text-white">
-                            {member.kdRatio.toFixed(1)}
-                          </span>
-                        </div>
-                        <span
-                          className="rounded-full px-2.5 py-0.5 font-[var(--font-condensed)] text-[9px] uppercase tracking-[0.12em] text-white/80 font-medium"
-                          style={{ backgroundColor: 'rgba(0,0,0,0.3)' }}
-                        >
-                          {member.role === "sniper" ? "Sharpshooter" : member.role === "rusher" ? "Assault" : member.role === "support" ? "Tactical" : "Field Medic"}
-                        </span>
-                      </div>
-
-                      <div className="absolute w-32 h-32 rounded-full border border-white/[0.07]" />
-                      <div className="absolute w-48 h-48 rounded-full border border-white/[0.04]" />
-
-                      <div className="relative w-20 h-20 rounded-full bg-white/10 border-2 border-white/20 flex items-center justify-center p-2.5">
-                        <AvatarIcon nickname={member.nickname} className="w-full h-full text-white/80" />
-                      </div>
-                    </div>
-
-                    {/* Info panel */}
-                    <div className="bg-[#F5F5F5] px-4 py-3.5 flex flex-col items-center text-center">
-                      <h3 className="font-display text-xl text-[#111] leading-none tracking-wide">
-                        {member.nickname}
-                      </h3>
-
-                      <p className="text-xs text-[#666] mt-1" style={{ fontFamily: "var(--font-body)" }}>
-                        {member.name} · {member.rank}
-                      </p>
-                    </div>
-                  </div>
-                )}
-              </GameCard>
+              <TiltCard>
+                <HeroCard member={member} />
+              </TiltCard>
             </motion.div>
           );
         })}
       </div>
+
+      <style>{`
+        .hero-card {
+          width: 220px;
+          aspect-ratio: 3 / 4.6;
+        }
+        @media (min-width: 768px) {
+          .hero-card {
+            width: 260px;
+          }
+        }
+        @media (min-width: 1024px) {
+          .hero-card {
+            width: 280px;
+          }
+        }
+      `}</style>
     </>
   );
 }

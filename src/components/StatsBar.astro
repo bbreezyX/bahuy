@@ -1,66 +1,246 @@
 ---
 import { CLAN } from "../data/clan";
 import { members } from "../data/members";
+
+const stats = [
+  {
+    value: members.length.toString(),
+    label: "Members",
+    icon: "users",
+  },
+  {
+    value: `${CLAN.stats.totalMatch.toLocaleString()}+`,
+    label: "Total Match",
+    icon: "crosshair",
+  },
+  {
+    value: `${CLAN.stats.winRate}%`,
+    label: "Win Rate",
+    icon: "trophy",
+  },
+  {
+    value: CLAN.established.toString(),
+    label: "Est.",
+    icon: "flag",
+  },
+];
 ---
 
-<section
-  id="stats"
-  class="relative bg-transparent py-16 md:py-24 mt-8 md:mt-16"
->
-  <!-- Subtle center divider -->
-  <div class="mx-auto max-w-[120px] h-px bg-white/10 mb-14 md:mb-20"></div>
+<section id="stats" class="relative py-20 md:py-28">
+  <!-- Top accent line -->
+  <div class="mx-auto max-w-[80px] h-px bg-gradient-to-r from-transparent via-[#C4A265]/40 to-transparent mb-16 md:mb-20"></div>
 
-  <div class="mx-auto max-w-[1280px] px-6 md:px-10 lg:px-12">
-    <div
-      class="grid grid-cols-2 gap-y-14 gap-x-8 md:flex md:justify-between md:gap-0"
-    >
-      <!-- Members -->
-      <div class="flex flex-col items-center text-center group">
-        <span
-          class="font-display text-5xl md:text-7xl text-white leading-none tracking-tighter"
-          >{members.length}</span
-        >
-        <span
-          class="font-condensed text-[11px] md:text-[13px] font-semibold uppercase tracking-[0.3em] text-white/40 mt-3"
-          >Members</span
-        >
-      </div>
+  <div class="mx-auto max-w-[1280px] px-4 md:px-6 lg:px-8">
+    <div class="stats-grid">
+      {stats.map((stat, i) => (
+        <div class="stat-card group" style={`--delay: ${i * 0.08}s`}>
+          {/* Glow accent on hover */}
+          <div class="stat-card__glow" />
 
-      <!-- Total Match -->
-      <div class="flex flex-col items-center text-center group">
-        <span
-          class="font-display text-5xl md:text-7xl text-white leading-none tracking-tighter"
-          >{CLAN.stats.totalMatch.toLocaleString()}+</span
-        >
-        <span
-          class="font-condensed text-[11px] md:text-[13px] font-semibold uppercase tracking-[0.3em] text-white/40 mt-3"
-          >Total Match</span
-        >
-      </div>
+          {/* Icon */}
+          <div class="stat-card__icon">
+            {stat.icon === "users" && (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+              </svg>
+            )}
+            {stat.icon === "crosshair" && (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="22" y1="12" x2="18" y2="12" />
+                <line x1="6" y1="12" x2="2" y2="12" />
+                <line x1="12" y1="6" x2="12" y2="2" />
+                <line x1="12" y1="22" x2="12" y2="18" />
+              </svg>
+            )}
+            {stat.icon === "trophy" && (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
+                <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+                <path d="M4 22h16" />
+                <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" />
+                <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" />
+                <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
+              </svg>
+            )}
+            {stat.icon === "flag" && (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" />
+                <line x1="4" y1="22" x2="4" y2="15" />
+              </svg>
+            )}
+          </div>
 
-      <!-- Win Rate -->
-      <div class="flex flex-col items-center text-center group">
-        <span
-          class="font-display text-5xl md:text-7xl text-white leading-none tracking-tighter"
-          >{CLAN.stats.winRate}%</span
-        >
-        <span
-          class="font-condensed text-[11px] md:text-[13px] font-semibold uppercase tracking-[0.3em] text-white/40 mt-3"
-          >Win Rate</span
-        >
-      </div>
+          {/* Value */}
+          <span class="stat-card__value font-display">
+            {stat.value}
+          </span>
 
-      <!-- Established -->
-      <div class="flex flex-col items-center text-center group">
-        <span
-          class="font-display text-5xl md:text-7xl text-white leading-none tracking-tighter"
-          >{CLAN.established}</span
-        >
-        <span
-          class="font-condensed text-[11px] md:text-[13px] font-semibold uppercase tracking-[0.3em] text-white/40 mt-3"
-          >Est.</span
-        >
-      </div>
+          {/* Label */}
+          <span class="stat-card__label font-condensed">
+            {stat.label}
+          </span>
+
+          {/* Bottom accent bar */}
+          <div class="stat-card__bar" />
+        </div>
+      ))}
     </div>
   </div>
 </section>
+
+<style>
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  @media (min-width: 768px) {
+    .stats-grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+    }
+  }
+
+  .stat-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 2rem 1rem 1.75rem;
+    border-radius: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: linear-gradient(
+      160deg,
+      rgba(255, 255, 255, 0.04) 0%,
+      rgba(255, 255, 255, 0.01) 100%
+    );
+    backdrop-filter: blur(12px);
+    overflow: hidden;
+    transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    animation: stat-fade-in 0.6s ease both;
+    animation-delay: var(--delay, 0s);
+  }
+
+  .stat-card:hover {
+    border-color: rgba(196, 162, 101, 0.2);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 32px rgba(196, 162, 101, 0.08);
+  }
+
+  .stat-card__glow {
+    position: absolute;
+    top: -50%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle, rgba(196, 162, 101, 0.12) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+  }
+
+  .stat-card:hover .stat-card__glow {
+    opacity: 1;
+  }
+
+  .stat-card__icon {
+    width: 2rem;
+    height: 2rem;
+    color: rgba(196, 162, 101, 0.5);
+    margin-bottom: 1rem;
+    transition: color 0.3s ease, transform 0.3s ease;
+  }
+
+  .stat-card:hover .stat-card__icon {
+    color: rgba(196, 162, 101, 0.8);
+    transform: scale(1.1);
+  }
+
+  .stat-card__icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .stat-card__value {
+    font-size: 2.5rem;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: #ffffff;
+    transition: color 0.3s ease;
+  }
+
+  .stat-card:hover .stat-card__value {
+    color: #f0e6d0;
+  }
+
+  @media (min-width: 768px) {
+    .stat-card__value {
+      font-size: 3.5rem;
+    }
+  }
+
+  .stat-card__label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.25em;
+    color: rgba(255, 255, 255, 0.35);
+    margin-top: 0.75rem;
+    transition: color 0.3s ease;
+  }
+
+  .stat-card:hover .stat-card__label {
+    color: rgba(196, 162, 101, 0.6);
+  }
+
+  @media (min-width: 768px) {
+    .stat-card__label {
+      font-size: 0.75rem;
+    }
+  }
+
+  .stat-card__bar {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%) scaleX(0);
+    width: 40%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #C4A265, transparent);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    transform-origin: center;
+  }
+
+  .stat-card:hover .stat-card__bar {
+    transform: translateX(-50%) scaleX(1);
+  }
+
+  @keyframes stat-fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (min-width: 768px) {
+    .stat-card {
+      padding: 2.5rem 1.5rem 2rem;
+    }
+
+    .stat-card__icon {
+      width: 2.25rem;
+      height: 2.25rem;
+    }
+  }
+</style>
