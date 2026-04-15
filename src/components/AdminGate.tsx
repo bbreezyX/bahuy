@@ -55,7 +55,7 @@ export default function AdminGate({ members }: AdminGateProps) {
         <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-6 text-center">
           {/* Lock icon */}
           <div className="flex justify-center mb-2">
-            <div className="w-16 h-16 rounded-full bg-white/[0.04] border border-white/10 flex items-center justify-center">
+            <div className="w-16 h-16 rounded-full bg-white/[0.08] border border-white/[0.12] flex items-center justify-center">
               <svg className="w-7 h-7 text-primary/70" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
                 <path d="M7 11V7a5 5 0 0 1 10 0v4" />
@@ -79,7 +79,7 @@ export default function AdminGate({ members }: AdminGateProps) {
               onChange={(e) => setCode(e.target.value)}
               placeholder="Masukkan kode..."
               autoFocus
-              className="w-full h-12 rounded-[var(--radius)] border border-white/10 bg-white/[0.04] px-4 text-center text-lg text-white placeholder:text-white/20 font-[var(--font-condensed)] tracking-[0.3em] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:border-primary/30 transition-colors"
+              className="w-full h-12 rounded-[var(--radius)] border border-white/[0.12] bg-white/[0.08] px-4 text-center text-lg text-white placeholder:text-white/20 font-[var(--font-condensed)] tracking-[0.3em] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:border-primary/30 transition-colors"
             />
           </div>
 
@@ -111,16 +111,16 @@ export default function AdminGate({ members }: AdminGateProps) {
     <div>
       {/* Admin bar */}
       <div className="mx-auto max-w-[1280px] px-4 md:px-6 lg:px-8 mb-6">
-        <div className="flex items-center justify-between py-3 px-4 rounded-lg bg-primary/10 border border-primary/20">
+        <div className="flex items-center justify-between py-3 px-4 rounded-lg bg-primary border border-primary">
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-            <span className="font-[var(--font-condensed)] text-xs sm:text-sm uppercase tracking-[0.15em] text-primary font-medium">
+            <span className="w-2 h-2 rounded-full bg-primary-foreground animate-pulse" />
+            <span className="font-[var(--font-condensed)] text-xs sm:text-sm uppercase tracking-[0.15em] text-primary-foreground font-medium">
               Admin Mode
             </span>
           </div>
           <button
             onClick={handleLogout}
-            className="font-[var(--font-condensed)] text-xs uppercase tracking-[0.12em] text-white/40 hover:text-white/70 transition-colors cursor-pointer px-3 py-1 rounded-full border border-white/10 hover:border-white/20"
+            className="font-[var(--font-condensed)] text-xs uppercase tracking-[0.12em] text-primary-foreground/70 hover:text-primary-foreground transition-colors cursor-pointer px-3 py-1 rounded-full border border-primary-foreground/20 hover:border-primary-foreground/40"
           >
             Logout
           </button>

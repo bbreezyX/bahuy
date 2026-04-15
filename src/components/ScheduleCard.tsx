@@ -42,27 +42,24 @@ export default function ScheduleCard({ event, members, index, onEdit, onDelete }
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.35, delay: index * 0.05 }}
       whileHover={isFinished ? undefined : { y: -3 }}
-      className={isFinished ? "opacity-50" : ""}
+      className={`h-full ${isFinished ? "opacity-50" : ""}`}
     >
       <div
-        className="relative rounded-lg border border-white/10 bg-white/[0.03] backdrop-blur-sm overflow-hidden hover:border-white/20 transition-colors"
+        className="relative h-full rounded-lg border border-white/[0.12] bg-white/[0.07] backdrop-blur-sm overflow-hidden hover:border-white/20 transition-colors"
       >
-        {/* Top color strip */}
-        <div className="h-[3px]" style={{ background: modeColor }} />
-
         <div className="p-5 sm:p-6">
           {/* Header: mode badge + status badge */}
           <div className="flex items-center justify-between gap-3 mb-4">
             <span
-              className="inline-block font-[var(--font-condensed)] text-[10px] sm:text-[11px] uppercase tracking-[0.2em] px-2.5 py-1 rounded-full text-white/90 font-medium"
-              style={{ backgroundColor: modeColor + "30", color: modeColor }}
+              className="inline-block font-[var(--font-condensed)] text-xs sm:text-sm uppercase tracking-[0.2em] px-2.5 py-1 rounded-full text-white/90 font-bold"
+              style={{ backgroundColor: modeColor + "30", color: modeColor, textShadow: `0 0 8px ${modeColor}60` }}
             >
               {gameModeLabels[event.gameMode]}
             </span>
 
             <span
-              className="inline-flex items-center gap-1.5 font-[var(--font-condensed)] text-[10px] sm:text-[11px] uppercase tracking-[0.15em] px-2.5 py-1 rounded-full font-medium"
-              style={{ backgroundColor: stColor + "20", color: stColor }}
+              className="inline-flex items-center gap-1.5 font-[var(--font-condensed)] text-xs sm:text-sm uppercase tracking-[0.15em] px-2.5 py-1 rounded-full font-bold"
+              style={{ backgroundColor: stColor + "20", color: stColor, textShadow: `0 0 8px ${stColor}60` }}
             >
               {event.status === "ongoing" && (
                 <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: stColor }} />
@@ -81,7 +78,7 @@ export default function ScheduleCard({ event, members, index, onEdit, onDelete }
 
           {/* Description */}
           {event.description && (
-            <p className="text-sm text-white/40 mb-4 leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
+            <p className="text-sm text-white/40 mb-4 leading-relaxed" style={{ fontFamily: "var(--font-body)", textShadow: "0 1px 4px rgba(255,255,255,0.06)" }}>
               {event.description}
             </p>
           )}
@@ -185,7 +182,7 @@ export default function ScheduleCard({ event, members, index, onEdit, onDelete }
 
           {/* Notes */}
           {event.notes && (
-            <div className="mt-4 px-3 py-2 rounded bg-white/[0.03] border-l-2" style={{ borderColor: modeColor + "60" }}>
+            <div className="mt-4 px-3 py-2 rounded bg-white/[0.05] border-l-2" style={{ borderColor: modeColor + "60" }}>
               <p className="text-xs text-white/35 leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
                 {event.notes}
               </p>

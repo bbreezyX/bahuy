@@ -116,11 +116,13 @@ export default function ScheduleView({ members, isAdmin = false }: ScheduleViewP
                     key={mode.value}
                     onClick={() => setActiveMode(mode.value)}
                     whileTap={{ scale: 0.96 }}
-                    className="relative whitespace-nowrap rounded-full px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm font-[var(--font-condensed)] uppercase tracking-[0.15em] font-medium border cursor-pointer"
+                    className="relative whitespace-nowrap rounded-full px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm font-[var(--font-condensed)] uppercase tracking-[0.15em] font-bold border cursor-pointer shadow-lg"
                     style={{
-                      borderColor: isActive ? "transparent" : "rgba(255,255,255,0.20)",
-                      color: isActive ? "#ffffff" : "rgba(255,255,255,0.65)",
-                      transition: "color 0.25s ease, border-color 0.25s ease",
+                      borderColor: isActive ? "transparent" : "rgba(255,255,255,0.30)",
+                      backgroundColor: isActive ? "transparent" : "rgba(255,255,255,0.05)",
+                      color: isActive ? "#ffffff" : "rgba(255,255,255,0.80)",
+                      textShadow: isActive ? "0 1px 4px rgba(0,0,0,0.5)" : "none",
+                      transition: "color 0.25s ease, border-color 0.25s ease, background-color 0.25s ease",
                     }}
                   >
                     {isActive && (
@@ -182,11 +184,11 @@ export default function ScheduleView({ members, isAdmin = false }: ScheduleViewP
                   <div key={group.group} className="mb-10 last:mb-0">
                     {/* Group label */}
                     <div className="flex items-center gap-4 mb-5">
-                      <h3 className="font-[var(--font-condensed)] text-sm sm:text-base uppercase tracking-[0.25em] text-primary/70 font-semibold whitespace-nowrap">
+                      <h3 className="font-[var(--font-condensed)] text-sm sm:text-base uppercase tracking-[0.25em] text-primary font-semibold whitespace-nowrap">
                         {group.label}
                       </h3>
-                      <div className="h-px flex-1 bg-white/[0.06]" />
-                      <span className="font-[var(--font-condensed)] text-xs uppercase tracking-[0.15em] text-white/25">
+                      <div className="h-px flex-1 bg-white/[0.10]" />
+                      <span className="font-[var(--font-condensed)] text-xs uppercase tracking-[0.15em] text-white/40">
                         {group.events.length}
                       </span>
                     </div>

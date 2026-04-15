@@ -36,7 +36,7 @@ export default function MemberProfile({ member, onBack }: MemberProfileProps) {
             <polyline points="15 18 9 12 15 6" />
           </svg>
         </div>
-        <span className="font-[var(--font-condensed)] text-xs uppercase tracking-[0.2em] text-white/40 group-hover/back:text-white/60 transition-colors">
+        <span className="font-[var(--font-condensed)] text-xs font-bold uppercase tracking-[0.2em] text-white/40 group-hover/back:text-white/60 transition-colors drop-shadow-md">
           Back to roster
         </span>
       </motion.button>
@@ -116,22 +116,36 @@ export default function MemberProfile({ member, onBack }: MemberProfileProps) {
           transition={{ delay: 0.15, duration: 0.4 }}
           className="flex-1 min-w-0"
         >
-          {/* Leader badge */}
-          {member.isLeader && (
-            <div className="flex items-center gap-1.5 mb-5">
-              <CrownIcon className="w-4 h-4 text-yellow-500/80" />
-              <span className="font-[var(--font-condensed)] text-sm font-extrabold uppercase tracking-[0.2em] text-yellow-500">
-                Clan Leader
-              </span>
-            </div>
-          )}
+          <div className="bg-[#0f1214] border border-white/10 rounded-xl p-6 md:p-8 relative overflow-hidden group h-full">
+            <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none" />
+            <div
+              className="absolute -top-24 -right-24 w-64 h-64 bg-current opacity-[0.03] blur-3xl rounded-full pointer-events-none"
+              style={{ color: bg }}
+            />
 
-          {/* Info rows */}
-          <div className="space-y-4">
-            <ProfileRow label="Name" value={member.name} accent={bgLight} />
-            <ProfileRow label="Nick Game" value={member.nickname} accent={bgLight} />
-            <ProfileRow label="Skills" value={roleLabel[member.role] || member.role} accent={bgLight} />
-            <ProfileRow label="City" value={member.city} accent={bgLight} />
+            <div className="relative z-10">
+              {member.isLeader && (
+                <div className="flex items-center gap-1.5 mb-6">
+                  <CrownIcon className="w-4 h-4 text-yellow-500/80" />
+                  <span className="font-[var(--font-condensed)] text-sm font-extrabold uppercase tracking-[0.2em] text-yellow-500">
+                    Clan Leader
+                  </span>
+                </div>
+              )}
+
+              <h4 className="font-[var(--font-condensed)] text-xs font-bold uppercase tracking-[0.25em] text-white/40 mb-6 flex items-center gap-3">
+                <span className="h-px bg-white/10 w-8" />
+                Operative Data
+                <span className="h-px bg-white/10 flex-1" />
+              </h4>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <StatBox label="Name" value={member.name} accent={bgLight} />
+                <StatBox label="Nickname" value={member.nickname} accent={bgLight} />
+                <StatBox label="Skills" value={roleLabel[member.role] || member.role} accent={bgLight} />
+                <StatBox label="City" value={member.city} accent={bgLight} />
+              </div>
+            </div>
           </div>
         </motion.div>
       </div>
@@ -139,15 +153,27 @@ export default function MemberProfile({ member, onBack }: MemberProfileProps) {
   );
 }
 
-function ProfileRow({ label, value, accent }: { label: string; value: string; accent: string }) {
+function StatBox({ label, value, accent, className = "" }: { label: string; value: string | number; accent: string; className?: string }) {
   return (
-    <div className="flex items-baseline gap-4 border-b border-white/[0.06] pb-3">
-      <span className="font-[var(--font-condensed)] text-xs font-extrabold uppercase tracking-[0.2em] text-white/40 w-28 shrink-0">
+    <div className={`relative overflow-hidden bg-[#0e1112] border border-white/10 rounded-lg p-5 flex flex-col justify-between group hover:border-white/20 transition-colors ${className}`}>
+      {/* Background glow on hover */}
+      <div 
+        className="absolute inset-0 opacity-0 group-hover:opacity-10 pointer-events-none transition-opacity duration-500" 
+        style={{ backgroundImage: `radial-gradient(circle at center, ${accent} 0%, transparent 70%)` }}
+      />
+      
+      <span className="font-[var(--font-condensed)] text-[10px] font-extrabold uppercase tracking-[0.25em] text-white/30 z-10 mb-2 group-hover:text-white/50 transition-colors">
         {label}
       </span>
-      <span className="text-base font-bold text-white" style={{ fontFamily: "var(--font-body)" }}>
+      <span className="text-xl sm:text-2xl font-bold text-white z-10 tracking-tight mt-1" style={{ fontFamily: "var(--font-display)" }}>
         {value}
       </span>
+
+      {/* Decorative corner bracket */}
+      <div 
+        className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 opacity-50 pointer-events-none" 
+        style={{ borderColor: accent }}
+      />
     </div>
   );
 }

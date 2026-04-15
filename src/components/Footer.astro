@@ -1,5 +1,7 @@
 ---
 import { CLAN } from "../data/clan";
+
+const currentYear = new Date().getFullYear();
 ---
 
 <footer class="bg-transparent py-16 md:py-24">
@@ -32,11 +34,34 @@ import { CLAN } from "../data/clan";
       >
         {CLAN.name}
       </p>
-      <p
-        class="font-condensed text-[12px] font-semibold uppercase tracking-[0.3em] text-white/50"
+      <div
+        class="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-center"
+        aria-label="Footer information"
       >
-        &copy; {new Date().getFullYear()} — Indonesia — All Rights Reserved
-      </p>
+        <span
+          class="font-condensed text-[11px] md:text-[12px] font-semibold uppercase tracking-[0.24em] text-white/50"
+        >
+          &copy; {currentYear}
+        </span>
+        <span
+          aria-hidden="true"
+          class="hidden md:block h-1 w-1 rounded-full bg-primary/35"
+        ></span>
+        <span
+          class="font-condensed text-[11px] md:text-[12px] font-semibold uppercase tracking-[0.24em] text-white/50"
+        >
+          {CLAN.region}
+        </span>
+        <span
+          aria-hidden="true"
+          class="hidden md:block h-1 w-1 rounded-full bg-primary/35"
+        ></span>
+        <span
+          class="basis-full md:basis-auto font-condensed text-[11px] md:text-[12px] font-semibold uppercase tracking-[0.24em] text-white/50"
+        >
+          All Rights Reserved
+        </span>
+      </div>
     </div>
 
     <!-- Social Icons -->

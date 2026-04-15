@@ -1,4 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Rajdhani:wght@300;400;500;600;700&family=Teko:wght@400;500;600;700&display=swap");
 @import "tailwindcss";
 
 @theme inline {
@@ -31,9 +30,9 @@
   --color-status-online: hsl(145 60% 40%);
   --color-status-offline: hsl(0 0% 40%);
 
-  --font-display: "Black Ops One", cursive;
-  --font-body: "Rajdhani", sans-serif;
-  --font-condensed: "Teko", sans-serif;
+  --font-display: "Black Ops One", "Arial Black", sans-serif;
+  --font-body: "IBM Plex Sans", sans-serif;
+  --font-condensed: "IBM Plex Sans Condensed", sans-serif;
 }
 
 @layer base {
