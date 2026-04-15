@@ -1,30 +1,23 @@
 export interface Member {
   nickname: string;
   name: string;
-  rank: "Private" | "Corporal" | "Sergeant" | "Lieutenant" | "Captain" | "Major" | "Colonel" | "General";
+  skills: string[];
   city: string;
-  role: "sniper" | "rusher" | "support" | "medic";
-  status: "online" | "offline";
-  joinDate: string;
-  kdRatio: number;
-  isFeatured: boolean;
   isLeader: boolean;
   avatar?: string;
   bio?: string;
 }
+
+// Re-export from new API for dynamic data (Supabase)
+export { fetchMembers, uploadAvatar, deleteAvatar, subscribeToMembers } from "@/lib/member-api";
 
 export const members: Member[] = [
   // ── A ─────────────────────────────────────────────────
   {
     nickname: "Abi",
     name: "Abi",
-    rank: "Major",
+    skills: ["Support", "Utility"],
     city: "Indonesia",
-    role: "support",
-    status: "online",
-    joinDate: "2024",
-    kdRatio: 1.8,
-    isFeatured: false,
     isLeader: false,
     avatar: "/abi.jpeg",
     bio: "Solid support player. Always has the team's back."
@@ -32,26 +25,16 @@ export const members: Member[] = [
   {
     nickname: "Akmal",
     name: "Akmal",
-    rank: "Sergeant",
+    skills: ["Rusher", "Close Range"],
     city: "Indonesia",
-    role: "rusher",
-    status: "offline",
-    joinDate: "2024",
-    kdRatio: 1.5,
-    isFeatured: false,
     isLeader: false,
     bio: "Quick reflexes and aggressive playstyle."
   },
   {
     nickname: "Anggoro",
     name: "Anggoro",
-    rank: "Captain",
+    skills: ["Rusher", "Entry Frag"],
     city: "Indonesia",
-    role: "rusher",
-    status: "online",
-    joinDate: "2024",
-    kdRatio: 1.7,
-    isFeatured: false,
     isLeader: false,
     avatar: "/anggoro.jpeg",
     bio: "Aggressive entry fragger with quick reflexes."
@@ -59,13 +42,8 @@ export const members: Member[] = [
   {
     nickname: "Arnold",
     name: "Arnold",
-    rank: "Captain",
+    skills: ["Sniper", "Long Range"],
     city: "Indonesia",
-    role: "sniper",
-    status: "online",
-    joinDate: "2024",
-    kdRatio: 1.9,
-    isFeatured: false,
     isLeader: false,
     avatar: "/arnold.jpeg",
     bio: "Precision shooter. Calm under pressure."
@@ -74,13 +52,8 @@ export const members: Member[] = [
   {
     nickname: "Bahuy",
     name: "Bahuy",
-    rank: "Colonel",
+    skills: ["Sniper", "Long Range", "IGL"],
     city: "Indonesia",
-    role: "sniper",
-    status: "online",
-    joinDate: "2024",
-    kdRatio: 2.5,
-    isFeatured: true,
     isLeader: true,
     avatar: "/bahuy.jpeg",
     bio: "Original Ace. Founding member of TEAM ULTRA."
@@ -88,13 +61,8 @@ export const members: Member[] = [
   {
     nickname: "Bobby",
     name: "Bobby",
-    rank: "Major",
+    skills: ["Rusher", "Frontliner"],
     city: "Indonesia",
-    role: "rusher",
-    status: "online",
-    joinDate: "2024",
-    kdRatio: 1.8,
-    isFeatured: false,
     isLeader: false,
     avatar: "/bobby.jpeg",
     bio: "Fearless frontliner. First in, last out."
@@ -102,26 +70,16 @@ export const members: Member[] = [
   {
     nickname: "Boy",
     name: "Boy",
-    rank: "Captain",
+    skills: ["Medic", "Revive"],
     city: "Indonesia",
-    role: "medic",
-    status: "offline",
-    joinDate: "2024",
-    kdRatio: 1.5,
-    isFeatured: false,
     isLeader: false,
     bio: "Reliable medic who keeps the squad alive."
   },
   {
     nickname: "Bram",
     name: "Bram",
-    rank: "Lieutenant",
+    skills: ["Support", "Utility"],
     city: "Indonesia",
-    role: "support",
-    status: "online",
-    joinDate: "2024",
-    kdRatio: 1.6,
-    isFeatured: false,
     isLeader: false,
     avatar: "/bram.jpeg",
     bio: "Tactical mind with great game sense."
@@ -130,13 +88,8 @@ export const members: Member[] = [
   {
     nickname: "Christ",
     name: "Christ",
-    rank: "Captain",
+    skills: ["Sniper", "Long Range"],
     city: "Indonesia",
-    role: "sniper",
-    status: "online",
-    joinDate: "2024",
-    kdRatio: 2.0,
-    isFeatured: false,
     isLeader: false,
     avatar: "/christ.jpeg",
     bio: "Sharpshooter with deadly accuracy at range."
@@ -145,26 +98,16 @@ export const members: Member[] = [
   {
     nickname: "Dimas",
     name: "Dimas",
-    rank: "Sergeant",
+    skills: ["Support", "Utility"],
     city: "Indonesia",
-    role: "support",
-    status: "offline",
-    joinDate: "2024",
-    kdRatio: 1.4,
-    isFeatured: false,
     isLeader: false,
     bio: "Versatile support with solid game awareness."
   },
   {
     nickname: "Dwiky",
     name: "Dwiky",
-    rank: "Sergeant",
+    skills: ["Rusher", "Close Range"],
     city: "Indonesia",
-    role: "rusher",
-    status: "online",
-    joinDate: "2024",
-    kdRatio: 1.6,
-    isFeatured: false,
     isLeader: false,
     avatar: "/dwiky.jpeg",
     bio: "Fast-paced attacker. Always pushing the tempo."
@@ -173,26 +116,16 @@ export const members: Member[] = [
   {
     nickname: "Fadil",
     name: "Fadil",
-    rank: "Colonel",
+    skills: ["Rusher", "Entry Frag", "IGL"],
     city: "Indonesia",
-    role: "rusher",
-    status: "online",
-    joinDate: "2024",
-    kdRatio: 2.3,
-    isFeatured: true,
     isLeader: true,
     bio: "Original Ace. Founding member of TEAM ULTRA."
   },
   {
     nickname: "Farhan",
     name: "Farhan",
-    rank: "Colonel",
+    skills: ["Support", "Utility", "IGL"],
     city: "Indonesia",
-    role: "support",
-    status: "online",
-    joinDate: "2024",
-    kdRatio: 2.2,
-    isFeatured: true,
     isLeader: true,
     avatar: "/farhan.jpeg",
     bio: "Original Ace. Founding member of TEAM ULTRA."
@@ -200,13 +133,8 @@ export const members: Member[] = [
   {
     nickname: "Ferdy",
     name: "Ferdy",
-    rank: "Lieutenant",
+    skills: ["Sniper", "Long Range"],
     city: "Indonesia",
-    role: "sniper",
-    status: "online",
-    joinDate: "2024",
-    kdRatio: 1.7,
-    isFeatured: false,
     isLeader: false,
     bio: "Sharp eyes and steady hands under fire."
   },
@@ -214,13 +142,8 @@ export const members: Member[] = [
   {
     nickname: "Galen",
     name: "Galen",
-    rank: "Colonel",
+    skills: ["Sniper", "Long Range", "IGL"],
     city: "Indonesia",
-    role: "sniper",
-    status: "online",
-    joinDate: "2024",
-    kdRatio: 2.4,
-    isFeatured: true,
     isLeader: true,
     avatar: "/galen.jpeg",
     bio: "Original Ace. Founding member of TEAM ULTRA."
@@ -229,13 +152,8 @@ export const members: Member[] = [
   {
     nickname: "Heru",
     name: "Heru",
-    rank: "Lieutenant",
+    skills: ["Sniper", "Long Range"],
     city: "Indonesia",
-    role: "sniper",
-    status: "online",
-    joinDate: "2024",
-    kdRatio: 1.9,
-    isFeatured: false,
     isLeader: false,
     bio: "Patient sniper. Waits for the perfect shot."
   },
@@ -243,13 +161,8 @@ export const members: Member[] = [
   {
     nickname: "Iwan",
     name: "Iwan",
-    rank: "Sergeant",
+    skills: ["Support", "Utility"],
     city: "Indonesia",
-    role: "support",
-    status: "online",
-    joinDate: "2024",
-    kdRatio: 1.5,
-    isFeatured: false,
     isLeader: false,
     avatar: "/iwan.jpeg",
     bio: "Utility specialist. Smoke and flash expert."
@@ -258,13 +171,8 @@ export const members: Member[] = [
   {
     nickname: "Jeffry",
     name: "Jeffry",
-    rank: "Major",
+    skills: ["Rusher", "Clutch"],
     city: "Indonesia",
-    role: "rusher",
-    status: "online",
-    joinDate: "2024",
-    kdRatio: 1.9,
-    isFeatured: false,
     isLeader: false,
     avatar: "/jeffry.jpeg",
     bio: "High-impact rusher with clutch potential."
@@ -272,13 +180,8 @@ export const members: Member[] = [
   {
     nickname: "Jeshua",
     name: "Jeshua",
-    rank: "Captain",
+    skills: ["Medic", "Revive"],
     city: "Indonesia",
-    role: "medic",
-    status: "online",
-    joinDate: "2024",
-    kdRatio: 1.6,
-    isFeatured: false,
     isLeader: false,
     avatar: "/jesua.jpeg",
     bio: "Dedicated healer. Team-first mentality."
@@ -286,13 +189,8 @@ export const members: Member[] = [
   {
     nickname: "Jevon",
     name: "Jevon",
-    rank: "Lieutenant",
+    skills: ["Sniper", "Long Range"],
     city: "Indonesia",
-    role: "sniper",
-    status: "online",
-    joinDate: "2024",
-    kdRatio: 1.8,
-    isFeatured: false,
     isLeader: false,
     avatar: "/jevon.jpeg",
     bio: "Rising talent with a keen eye for headshots."
@@ -300,13 +198,8 @@ export const members: Member[] = [
   {
     nickname: "John",
     name: "John",
-    rank: "Colonel",
+    skills: ["Rusher", "Entry Frag", "IGL"],
     city: "Indonesia",
-    role: "rusher",
-    status: "online",
-    joinDate: "2024",
-    kdRatio: 2.3,
-    isFeatured: true,
     isLeader: true,
     avatar: "/john.jpeg",
     bio: "Original Ace. Founding member of TEAM ULTRA."
@@ -315,26 +208,16 @@ export const members: Member[] = [
   {
     nickname: "Ken",
     name: "Ken",
-    rank: "Sergeant",
+    skills: ["Medic", "Revive"],
     city: "Indonesia",
-    role: "medic",
-    status: "offline",
-    joinDate: "2024",
-    kdRatio: 1.4,
-    isFeatured: false,
     isLeader: false,
     bio: "Combat medic with quick revive skills."
   },
   {
     nickname: "Ky",
     name: "Ky",
-    rank: "Captain",
+    skills: ["Rusher", "Close Range"],
     city: "Indonesia",
-    role: "rusher",
-    status: "online",
-    joinDate: "2024",
-    kdRatio: 1.7,
-    isFeatured: false,
     isLeader: false,
     avatar: "/ky.jpeg",
     bio: "Explosive entry. Thrives in chaos."
@@ -343,13 +226,8 @@ export const members: Member[] = [
   {
     nickname: "Rendi",
     name: "Rendi",
-    rank: "Sergeant",
+    skills: ["Support", "Anchor"],
     city: "Indonesia",
-    role: "support",
-    status: "online",
-    joinDate: "2024",
-    kdRatio: 1.5,
-    isFeatured: false,
     isLeader: false,
     avatar: "/rendi.jpeg",
     bio: "Anchor player. Holds the site down."
@@ -357,13 +235,8 @@ export const members: Member[] = [
   {
     nickname: "Ricky",
     name: "Ricky",
-    rank: "Major",
+    skills: ["Sniper", "Long Range"],
     city: "Indonesia",
-    role: "sniper",
-    status: "online",
-    joinDate: "2024",
-    kdRatio: 2.0,
-    isFeatured: false,
     isLeader: false,
     avatar: "/ricky.jpeg",
     bio: "Veteran sniper. Consistent and reliable."
@@ -371,13 +244,8 @@ export const members: Member[] = [
   {
     nickname: "Roni",
     name: "Roni",
-    rank: "Sergeant",
+    skills: ["Medic", "Revive"],
     city: "Indonesia",
-    role: "medic",
-    status: "offline",
-    joinDate: "2024",
-    kdRatio: 1.4,
-    isFeatured: false,
     isLeader: false,
     bio: "Field medic who never leaves a teammate behind."
   },
@@ -385,13 +253,8 @@ export const members: Member[] = [
   {
     nickname: "Theo",
     name: "Theo",
-    rank: "Lieutenant",
+    skills: ["Rusher", "Entry Frag"],
     city: "Indonesia",
-    role: "rusher",
-    status: "online",
-    joinDate: "2024",
-    kdRatio: 1.7,
-    isFeatured: false,
     isLeader: false,
     avatar: "/theo.jpeg",
     bio: "Aggressive playstyle with smart rotations."
@@ -399,13 +262,8 @@ export const members: Member[] = [
   {
     nickname: "Tony",
     name: "Tony",
-    rank: "Colonel",
+    skills: ["Support", "Utility", "IGL"],
     city: "Indonesia",
-    role: "support",
-    status: "online",
-    joinDate: "2024",
-    kdRatio: 2.1,
-    isFeatured: false,
     isLeader: true,
     avatar: "/tony.jpeg",
     bio: "Original Ace. Founding member of TEAM ULTRA."
@@ -414,13 +272,8 @@ export const members: Member[] = [
   {
     nickname: "Yaden",
     name: "Yaden",
-    rank: "Sergeant",
+    skills: ["Support", "Utility"],
     city: "Indonesia",
-    role: "support",
-    status: "online",
-    joinDate: "2024",
-    kdRatio: 1.5,
-    isFeatured: false,
     isLeader: false,
     avatar: "/jaden.jpeg",
     bio: "Dependable teammate. Always in the right position."
@@ -428,25 +281,9 @@ export const members: Member[] = [
   {
     nickname: "Yudi",
     name: "Yudi",
-    rank: "Sergeant",
+    skills: ["Rusher", "Close Range"],
     city: "Indonesia",
-    role: "rusher",
-    status: "offline",
-    joinDate: "2024",
-    kdRatio: 1.3,
-    isFeatured: false,
     isLeader: false,
     bio: "Energetic rusher with unpredictable moves."
   },
 ];
-
-export const rankOrder: Record<Member["rank"], number> = {
-  General: 8,
-  Colonel: 7,
-  Major: 6,
-  Captain: 5,
-  Lieutenant: 4,
-  Sergeant: 3,
-  Corporal: 2,
-  Private: 1,
-};

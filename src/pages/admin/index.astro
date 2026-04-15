@@ -1,11 +1,11 @@
 ---
 import MainLayout from "../../layouts/MainLayout.astro";
-import ScheduleAdminApp from "../../components/ScheduleAdminApp";
+import MemberAdminApp from "../../components/MemberAdminApp";
 import { members } from "../../data/members";
 ---
 
 <MainLayout>
   <main>
-    <ScheduleAdminApp members={members} client:load />
+    <MemberAdminApp initialMembers={members} client:load />
   </main>
 </MainLayout>

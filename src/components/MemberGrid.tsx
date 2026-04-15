@@ -53,7 +53,7 @@ export default function MemberGrid({ members }: MemberGridProps) {
     let result = [...members];
 
     if (activeRole !== "all") {
-      result = result.filter((m) => m.role === activeRole);
+      result = result.filter((m) => m.skills[0]?.toLowerCase() === activeRole);
     }
 
     if (searchQuery.trim()) {

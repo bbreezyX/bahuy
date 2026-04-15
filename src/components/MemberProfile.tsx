@@ -1,8 +1,10 @@
 /** @jsxImportSource react */
 import { motion } from "motion/react";
 import type { Member } from "@/data/members";
-import { roleBg, roleBgLight, roleLabel } from "./MemberCard";
 import CardFrame from "./CardFrame";
+
+const ACCENT = "#C4A265";
+const ACCENT_LIGHT = "#D4B275";
 
 interface MemberProfileProps {
   member: Member;
@@ -18,8 +20,6 @@ function CrownIcon({ className }: { className?: string }) {
 }
 
 export default function MemberProfile({ member, onBack }: MemberProfileProps) {
-  const bg = roleBg[member.role] || "#C4A265";
-  const bgLight = roleBgLight[member.role] || "#D4B275";
 
   return (
     <div>
@@ -51,7 +51,7 @@ export default function MemberProfile({ member, onBack }: MemberProfileProps) {
           transition={{ type: "spring", stiffness: 300, damping: 25, delay: 0.05 }}
           className="shrink-0 w-full lg:w-[320px] xl:w-[360px]"
         >
-          <div className="relative aspect-[3/4.6] overflow-hidden bg-[#0e1112] rounded-lg" style={{ boxShadow: `0 0 0 1px rgba(255,255,255,0.08), 0 0 40px 0px ${bg}90` }}>
+          <div className="relative aspect-[3/4.6] overflow-hidden bg-[#0e1112] rounded-lg" style={{ boxShadow: `0 0 0 1px rgba(255,255,255,0.08), 0 0 40px 0px ${ACCENT}90` }}>
             {/* Portrait content */}
             <div className="absolute inset-0 z-10">
               {member.avatar ? (
@@ -85,7 +85,7 @@ export default function MemberProfile({ member, onBack }: MemberProfileProps) {
             </div>
 
             {/* Tech frame — dark border frames the photo */}
-            <CardFrame accent={bgLight} bgFill={member.avatar ? undefined : bg} hasAvatar={!!member.avatar} />
+            <CardFrame accent={ACCENT_LIGHT} bgFill={member.avatar ? undefined : ACCENT} hasAvatar={!!member.avatar} />
 
             {/* Leader crown */}
             {member.isLeader && (
@@ -100,7 +100,7 @@ export default function MemberProfile({ member, onBack }: MemberProfileProps) {
                 className="inline-block font-[var(--font-condensed)] text-[9px] uppercase tracking-[0.25em] px-2.5 py-0.5 text-white/80 mb-2"
                 style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
               >
-                {roleLabel[member.role] || member.role}
+                {member.skills[0] || "Member"}
               </span>
               <h2 className="font-display text-3xl sm:text-4xl text-white leading-none tracking-wide">
                 {member.nickname}
@@ -120,7 +120,7 @@ export default function MemberProfile({ member, onBack }: MemberProfileProps) {
             <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none" />
             <div
               className="absolute -top-24 -right-24 w-64 h-64 bg-current opacity-[0.03] blur-3xl rounded-full pointer-events-none"
-              style={{ color: bg }}
+              style={{ color: ACCENT }}
             />
 
             <div className="relative z-10">
@@ -140,11 +140,27 @@ export default function MemberProfile({ member, onBack }: MemberProfileProps) {
               </h4>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <StatBox label="Name" value={member.name} accent={bgLight} />
-                <StatBox label="Nickname" value={member.nickname} accent={bgLight} />
-                <StatBox label="Skills" value={roleLabel[member.role] || member.role} accent={bgLight} />
-                <StatBox label="City" value={member.city} accent={bgLight} />
+                <StatBox label="Name" value={member.name} accent={ACCENT_LIGHT} />
+                <StatBox label="Nickname" value={member.nickname} accent={ACCENT_LIGHT} />
+                <StatBox label="City" value={member.city} accent={ACCENT_LIGHT} />
+                {member.bio && <StatBox label="Bio" value={member.bio} accent={ACCENT_LIGHT} className="sm:col-span-2" />}
               </div>
+              {member.skills.length > 0 && (
+                <div className="mt-4">
+                  <span className="font-[var(--font-condensed)] text-[10px] font-extrabold uppercase tracking-[0.25em] text-white/30 block mb-2">Skills</span>
+                  <div className="flex flex-wrap gap-2">
+                    {member.skills.map((skill) => (
+                      <span
+                        key={skill}
+                        className="font-[var(--font-condensed)] text-[11px] uppercase tracking-[0.15em] px-3 py-1 border text-white/70 rounded"
+                        style={{ borderColor: `${ACCENT_LIGHT}50`, backgroundColor: `${ACCENT}15` }}
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </motion.div>

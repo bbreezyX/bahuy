@@ -3,7 +3,10 @@ import { CLAN } from "../data/clan";
 import { members } from "../data/members";
 import HeroCards from "./HeroCards";
 
-const featuredMembers = members.filter((m) => m.isFeatured).slice(0, 5);
+const featuredMembers = [
+  ...members.filter((m) => m.isLeader),
+  ...members.filter((m) => !m.isLeader),
+].slice(0, 5);
 ---
 
 <section

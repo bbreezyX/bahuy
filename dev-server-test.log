@@ -1,0 +1,65 @@
+[vite] connected.
+[2m18.57.49[22m [34m[types][39m Generated [2m2ms[22m
+[33m[1m18.57.49[22m [WARN] [content][39m Content config not loaded
+[42m[1m astro [22m[49m [32mv6.1.6[39m [2mready in[22m 5536 [2mms[22m
+[2m┃[22m Local    [36mhttp://127.0.0.1:4400/[39m
+[2m18.57.49[22m [32mwatching for file changes...[39m
+[vite] program reload
+[vite] An error happened during full reload
+Failed to load url astro:server-app.js (resolved id: astro:server-app). Does the file exist?
+Error: Failed to load url astro:server-app.js (resolved id: astro:server-app). Does the file exist?
+    at loadAndTransform (file:///C:/Users/distributorkomputer/Documents/web-[2m18.58.40[22m Configuration file updated. Restarting...
+[vite] connected.
+[2m18.58.44[22m [34m[vite][39m server restarted.
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/WasmTtsEngine/20260407.1/offscreen.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/efaidnbmnnnibpcajpcglclefindmkaj/26.4.1.0_0/extension-detection.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/efaidnbmnnnibpcajpcglclefindmkaj/26.4.1.0_0/localFileSignInRedirection.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/efaidnbmnnnibpcajpcglclefindmkaj/26.4.1.0_0/sessionExpired.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/efaidnbmnnnibpcajpcglclefindmkaj/26.4.1.0_0/signInAdobeYolo.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/efaidnbmnnnibpcajpcglclefindmkaj/26.4.1.0_0/signInHandler.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/efaidnbmnnnibpcajpcglclefindmkaj/26.4.1.0_0/viewer.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/efaidnbmnnnibpcajpcglclefindmkaj/26.4.1.0_0/browser/js/check-cookies.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/efaidnbmnnnibpcajpcglclefindmkaj/26.4.1.0_0/browser/js/download-banner.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/efaidnbmnnnibpcajpcglclefindmkaj/26.4.1.0_0/browser/js/express.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/efaidnbmnnnibpcajpcglclefindmkaj/26.4.1.0_0/browser/js/failToast.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/efaidnbmnnnibpcajpcglclefindmkaj/26.4.1.0_0/browser/js/frame.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/efaidnbmnnnibpcajpcglclefindmkaj/26.4.1.0_0/browser/js/frameUI.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/efaidnbmnnnibpcajpcglclefindmkaj/26.4.1.0_0/browser/js/legacy-options.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/efaidnbmnnnibpcajpcglclefindmkaj/26.4.1.0_0/browser/js/local-fte.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/efaidnbmnnnibpcajpcglclefindmkaj/26.4.1.0_0/browser/js/lsCopy.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/efaidnbmnnnibpcajpcglclefindmkaj/26.4.1.0_0/browser/js/newAssistantPopup.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/efaidnbmnnnibpcajpcglclefindmkaj/26.4.1.0_0/browser/js/options.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/efaidnbmnnnibpcajpcglclefindmkaj/26.4.1.0_0/browser/js/popup.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/efaidnbmnnnibpcajpcglclefindmkaj/26.4.1.0_0/browser/js/preference-page.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/efaidnbmnnnibpcajpcglclefindmkaj/26.4.1.0_0/browser/js/progress.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/efaidnbmnnnibpcajpcglclefindmkaj/26.4.1.0_0/browser/js/remote-executor-bridge.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/efaidnbmnnnibpcajpcglclefindmkaj/26.4.1.0_0/browser/js/searchWidget.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/efaidnbmnnnibpcajpcglclefindmkaj/26.4.1.0_0/browser/js/searchWidgetSkeleton.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/efaidnbmnnnibpcajpcglclefindmkaj/26.4.1.0_0/browser/js/successToast.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/efaidnbmnnnibpcajpcglclefindmkaj/26.4.1.0_0/browser/js/offscreen/offscreen.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/efaidnbmnnnibpcajpcglclefindmkaj/26.4.1.0_0/browser/js/local-file/local-file-blocking-page.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/efaidnbmnnnibpcajpcglclefindmkaj/26.4.1.0_0/browser/js/local-file/local-file-prompt.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/efaidnbmnnnibpcajpcglclefindmkaj/26.4.1.0_0/browser/js/viewer/extension-detection.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/efaidnbmnnnibpcajpcglclefindmkaj/26.4.1.0_0/browser/js/viewer/localFileSignInRedirection.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/efaidnbmnnnibpcajpcglclefindmkaj/26.4.1.0_0/browser/js/viewer/sessionExpired.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/efaidnbmnnnibpcajpcglclefindmkaj/26.4.1.0_0/browser/js/viewer/signInAdobeYolo.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/efaidnbmnnnibpcajpcglclefindmkaj/26.4.1.0_0/browser/js/viewer/signInHandler.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/efaidnbmnnnibpcajpcglclefindmkaj/26.4.1.0_0/browser/js/viewer/viewer.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/efaidnbmnnnibpcajpcglclefindmkaj/26.4.1.0_0/resources/chromeOS/handler.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/efaidnbmnnnibpcajpcglclefindmkaj/26.4.1.0_0/resources/express/expressContextualFTE.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/efaidnbmnnnibpcajpcglclefindmkaj/26.4.1.0_0/resources/express/expressHoverCTA.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/efaidnbmnnnibpcajpcglclefindmkaj/26.4.1.0_0/resources/express/expressSingleClickCTA.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/efaidnbmnnnibpcajpcglclefindmkaj/26.4.1.0_0/resources/express/imageToolsDropdown.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/efaidnbmnnnibpcajpcglclefindmkaj/26.4.1.0_0/resources/addWebpage/index.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/efaidnbmnnnibpcajpcglclefindmkaj/26.4.1.0_0/resources/SidePanel/ActionableCoachmark.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/efaidnbmnnnibpcajpcglclefindmkaj/26.4.1.0_0/resources/SidePanel/FABIcon.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/efaidnbmnnnibpcajpcglclefindmkaj/26.4.1.0_0/resources/SidePanel/FABViewSettings.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/efaidnbmnnnibpcajpcglclefindmkaj/26.4.1.0_0/resources/SidePanel/index.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/efaidnbmnnnibpcajpcglclefindmkaj/26.4.1.0_0/resources/SidePanel/sidePanelButton.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/efaidnbmnnnibpcajpcglclefindmkaj/26.4.1.0_0/resources/SidePanel/sidePanelUpsellSuccess.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/efaidnbmnnnibpcajpcglclefindmkaj/26.4.1.0_0/resources/SidePanel/signInSuccess.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/efaidnbmnnnibpcajpcglclefindmkaj/26.4.1.0_0/resources/toast/toast.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/efaidnbmnnnibpcajpcglclefindmkaj/26.4.1.0_0/resources/outlook/error-toast.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.104.1_0/offscreendocument.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/lmjegmlicamnimmfhcmpkclmigmmcbeh/3.10_0/offscreen.html
+[2m18.59.28[22m [34m[watch][39m .chrome-headless/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/html/craw_window.html

@@ -1,33 +1,13 @@
 import { motion } from "motion/react";
 import { useState, useRef, useCallback, useEffect, useMemo } from "react";
 import type { Member } from "@/data/members";
-import AvatarIcon from "./AvatarIcon";
 import CardFrame from "./CardFrame";
 
 interface HeroCardsProps {
   members: Member[];
 }
 
-const roleBg: Record<string, string> = {
-  sniper: "#8B2020",
-  rusher: "#C86A1A",
-  support: "#2563A8",
-  medic: "#1F7A45",
-};
-
-const roleBgLight: Record<string, string> = {
-  sniper: "#A83030",
-  rusher: "#E08030",
-  support: "#3B82C6",
-  medic: "#2D9958",
-};
-
-const roleLabel: Record<string, string> = {
-  sniper: "SHARPSHOOTER",
-  rusher: "ASSAULT",
-  support: "TACTICAL",
-  medic: "FIELD MEDIC",
-};
+const ACCENT = "#C4A265";
 
 function useElementWidth(ref: React.RefObject<HTMLDivElement | null>) {
   const [width, setWidth] = useState(900);
@@ -112,8 +92,6 @@ function TiltCard({ children }: { children: React.ReactNode }) {
 /* ── Hero card (same style as MemberCard, with CardFrame SVG) ── */
 
 function HeroCard({ member }: { member: Member }) {
-  const bg = roleBg[member.role] || "#C4A265";
-  const bgLight = roleBgLight[member.role] || "#D4B275";
   const hasAvatar = !!member.avatar;
 
   return (
@@ -160,17 +138,7 @@ function HeroCard({ member }: { member: Member }) {
       </div>
 
       {/* SVG tech frame */}
-      <CardFrame accent="#f9c651" bgFill={hasAvatar ? undefined : bg} hasAvatar={hasAvatar} />
-
-      {/* Role tag top-left */}
-      <div className="absolute top-[7%] left-[8%] z-30">
-        <span
-          className="inline-block font-[var(--font-condensed)] text-[8px] sm:text-[9px] uppercase tracking-[0.2em] px-2 py-0.5 text-white/80"
-          style={{ backgroundColor: "rgba(0,0,0,0.5)", backdropFilter: "blur(4px)" }}
-        >
-          {roleLabel[member.role] || member.role}
-        </span>
-      </div>
+      <CardFrame accent={ACCENT} bgFill={hasAvatar ? undefined : ACCENT} hasAvatar={hasAvatar} />
 
       {/* Leader crown badge */}
       {member.isLeader && (
@@ -181,13 +149,27 @@ function HeroCard({ member }: { member: Member }) {
         </div>
       )}
 
-      {/* Name area at bottom */}
-      <div className="absolute bottom-0 left-0 right-0 z-30 px-[8%] pb-[6%]">
+      {/* Bottom info: skills + nickname + name */}
+      <div className="absolute bottom-0 left-0 right-0 z-30 px-[8%] pb-[3%] flex flex-col items-center gap-1">
+        {/* Skills pills */}
+        {member.skills.length > 0 && (
+          <div className="flex flex-wrap justify-center gap-1">
+            {member.skills.map((skill) => (
+              <span
+                key={skill}
+                className="font-[var(--font-condensed)] text-[7px] sm:text-[8px] uppercase tracking-[0.15em] px-1.5 py-0.5 text-white/70 rounded"
+                style={{ backgroundColor: "rgba(196,162,101,0.20)", border: "1px solid rgba(196,162,101,0.50)" }}
+              >
+                {skill}
+              </span>
+            ))}
+          </div>
+        )}
         <h3 className="font-display text-base sm:text-lg lg:text-xl text-white leading-tight tracking-wide truncate text-center">
           {member.nickname}
         </h3>
         <p
-          className="text-[9px] sm:text-[10px] text-white/40 truncate mt-0.5 text-center"
+          className="text-[9px] sm:text-[10px] text-white/40 truncate text-center"
           style={{ fontFamily: "var(--font-body)" }}
         >
           {member.name}

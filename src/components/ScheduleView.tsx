@@ -106,38 +106,36 @@ export default function ScheduleView({ members, isAdmin = false }: ScheduleViewP
     <section className="pb-20 md:pb-28 relative">
       <div className="mx-auto max-w-[1280px] px-4 md:px-6 lg:px-8">
         {/* Header: Filter pills + Add button */}
-        <div className="flex items-center gap-3 mb-10">
-          <div className="flex-1 overflow-x-auto scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0">
-            <div className="flex items-center gap-1.5 sm:gap-2 w-max md:w-auto">
-              {modes.map((mode) => {
-                const isActive = activeMode === mode.value;
-                return (
-                  <motion.button
-                    key={mode.value}
-                    onClick={() => setActiveMode(mode.value)}
-                    whileTap={{ scale: 0.96 }}
-                    className="relative whitespace-nowrap rounded-full px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm font-[var(--font-condensed)] uppercase tracking-[0.15em] font-bold border cursor-pointer shadow-lg"
-                    style={{
-                      borderColor: isActive ? "transparent" : "rgba(255,255,255,0.30)",
-                      backgroundColor: isActive ? "transparent" : "rgba(255,255,255,0.05)",
-                      color: isActive ? "#ffffff" : "rgba(255,255,255,0.80)",
-                      textShadow: isActive ? "0 1px 4px rgba(0,0,0,0.5)" : "none",
-                      transition: "color 0.25s ease, border-color 0.25s ease, background-color 0.25s ease",
-                    }}
-                  >
-                    {isActive && (
-                      <motion.span
-                        layoutId="activeModePill"
-                        className="absolute inset-0 rounded-full overflow-hidden"
-                        style={{ backgroundColor: mode.color }}
-                        transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                      />
-                    )}
-                    <span className="relative z-10">{mode.label}</span>
-                  </motion.button>
-                );
-              })}
-            </div>
+        <div className="flex items-start justify-between gap-3 mb-10">
+          <div className="flex flex-wrap gap-1.5 sm:gap-2">
+            {modes.map((mode) => {
+              const isActive = activeMode === mode.value;
+              return (
+                <motion.button
+                  key={mode.value}
+                  onClick={() => setActiveMode(mode.value)}
+                  whileTap={{ scale: 0.96 }}
+                  className="relative whitespace-nowrap rounded-full px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm font-[var(--font-condensed)] uppercase tracking-[0.15em] font-bold border cursor-pointer shadow-lg"
+                  style={{
+                    borderColor: isActive ? "transparent" : "rgba(255,255,255,0.30)",
+                    backgroundColor: isActive ? "transparent" : "rgba(255,255,255,0.05)",
+                    color: isActive ? "#ffffff" : "rgba(255,255,255,0.80)",
+                    textShadow: isActive ? "0 1px 4px rgba(0,0,0,0.5)" : "none",
+                    transition: "color 0.25s ease, border-color 0.25s ease, background-color 0.25s ease",
+                  }}
+                >
+                  {isActive && (
+                    <motion.span
+                      layoutId="activeModePill"
+                      className="absolute inset-0 rounded-full overflow-hidden"
+                      style={{ backgroundColor: mode.color }}
+                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                    />
+                  )}
+                  <span className="relative z-10">{mode.label}</span>
+                </motion.button>
+              );
+            })}
           </div>
 
           {/* Add button (admin only) */}

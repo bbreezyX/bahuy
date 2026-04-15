@@ -1,7 +1,6 @@
 /** @jsxImportSource react */
 import { motion } from "motion/react";
 import type { Member } from "@/data/members";
-import AvatarIcon from "./AvatarIcon";
 import CardFrame from "./CardFrame";
 
 interface MemberCardProps {
@@ -11,33 +10,12 @@ interface MemberCardProps {
   onClick: () => void;
 }
 
-const roleBg: Record<string, string> = {
-  sniper: "#8B2020",
-  rusher: "#C86A1A",
-  support: "#2563A8",
-  medic: "#1F7A45",
-};
-
-const roleBgLight: Record<string, string> = {
-  sniper: "#A83030",
-  rusher: "#E08030",
-  support: "#3B82C6",
-  medic: "#2D9958",
-};
-
-const roleLabel: Record<string, string> = {
-  sniper: "SHARPSHOOTER",
-  rusher: "ASSAULT",
-  support: "TACTICAL",
-  medic: "FIELD MEDIC",
-};
-
-export { roleBg, roleBgLight, roleLabel };
+const ACCENT = "#C4A265";
+const ACCENT_LIGHT = "#D4B275";
 
 export default function MemberCard({ member, index, isSelected, onClick }: MemberCardProps) {
-  const bg = roleBg[member.role] || "#C4A265";
-  const bgLight = roleBgLight[member.role] || "#D4B275";
-  const accent = isSelected ? bgLight : "#f9c651";
+  const accent = isSelected ? ACCENT_LIGHT : ACCENT;
+  const hasValidAvatar = !!member.avatar && !member.avatar.includes("placeholder");
 
   return (
     <motion.div
@@ -45,7 +23,7 @@ export default function MemberCard({ member, index, isSelected, onClick }: Membe
       initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.95 }}
-      transition={{ duration: 0.35, delay: index * 0.03 }}
+      transition={{ duration: 0.3, delay: index * 0.015 }}
       whileHover={{ scale: 1.03, y: -5 }}
       whileTap={{ scale: 0.98 }}
       className="cursor-pointer"
@@ -59,30 +37,26 @@ export default function MemberCard({ member, index, isSelected, onClick }: Membe
             : `0 0 0 1px rgba(255,255,255,0.05)`,
         }}
       >
-        {/* Portrait content (behind frame, only visible inside the shape) */}
+        {/* Portrait content */}
         <div className="absolute inset-0 z-10">
-          {member.avatar ? (
+          {hasValidAvatar ? (
             <img
               src={member.avatar}
               alt={member.nickname}
               className="absolute inset-0 w-full h-full object-cover object-top"
+              loading="lazy"
             />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center bg-[#141819]">
-              {/* Biodata-style photo placeholder with frame */}
               <div className="relative w-[65%] h-[70%] flex items-center justify-center">
-                {/* Outer frame */}
                 <div className="absolute inset-0 rounded-sm border border-white/[0.08]" />
-                {/* Inner frame line */}
                 <div className="absolute inset-[3px] rounded-sm border border-white/[0.05]" />
-                {/* Corner accents */}
                 <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 120" fill="none" preserveAspectRatio="none">
                   <path d="M0 12 L0 0 L12 0" stroke="white" strokeOpacity="0.15" strokeWidth="1.5" />
                   <path d="M88 0 L100 0 L100 12" stroke="white" strokeOpacity="0.15" strokeWidth="1.5" />
                   <path d="M100 108 L100 120 L88 120" stroke="white" strokeOpacity="0.15" strokeWidth="1.5" />
                   <path d="M12 120 L0 120 L0 108" stroke="white" strokeOpacity="0.15" strokeWidth="1.5" />
                 </svg>
-                {/* Person silhouette */}
                 <svg className="w-[55%] text-white/[0.08]" viewBox="0 0 64 80" fill="currentColor">
                   <circle cx="32" cy="22" r="12" />
                   <path d="M10 72c0-14 10-26 22-26s22 12 22 26" />
@@ -91,25 +65,13 @@ export default function MemberCard({ member, index, isSelected, onClick }: Membe
             </div>
           )}
 
-          {/* Bottom gradient for text readability */}
           <div
-            className="absolute bottom-0 left-0 right-0 h-[45%] pointer-events-none"
-            style={{ background: "linear-gradient(to top, rgba(14,17,18,0.95) 0%, rgba(14,17,18,0.7) 40%, transparent 100%)" }}
+            className="absolute bottom-0 left-0 right-0 h-[55%] pointer-events-none"
+            style={{ background: "linear-gradient(to top, rgba(14,17,18,0.98) 0%, rgba(14,17,18,0.80) 50%, transparent 100%)" }}
           />
         </div>
 
-        {/* SVG tech frame — dark border frames the photo, inner cutout shows image */}
-        <CardFrame accent={accent} bgFill={member.avatar ? undefined : bg} hasAvatar={!!member.avatar} />
-
-        {/* Role tag top-left */}
-        <div className="absolute top-[7%] left-[8%] z-30">
-          <span
-            className="inline-block font-[var(--font-condensed)] text-[7px] sm:text-[8px] uppercase tracking-[0.2em] px-2 py-0.5 text-white/80"
-            style={{ backgroundColor: "rgba(0,0,0,0.5)", backdropFilter: "blur(4px)" }}
-          >
-            {roleLabel[member.role] || member.role}
-          </span>
-        </div>
+        <CardFrame accent={accent} bgFill={hasValidAvatar ? undefined : ACCENT} hasAvatar={hasValidAvatar} />
 
         {/* Leader crown badge */}
         {member.isLeader && (
@@ -120,14 +82,26 @@ export default function MemberCard({ member, index, isSelected, onClick }: Membe
           </div>
         )}
 
-
-        {/* Name area at bottom */}
-        <div className="absolute bottom-0 left-0 right-0 z-30 px-[8%] pb-[6%]">
+        {/* Bottom: skills + name */}
+        <div className="absolute bottom-0 left-0 right-0 z-30 px-[8%] pb-[3%] flex flex-col items-center gap-1">
+          {member.skills.length > 0 && (
+            <div className="flex flex-wrap justify-center gap-1">
+              {member.skills.map((skill) => (
+                <span
+                  key={skill}
+                  className="font-[var(--font-condensed)] text-[7px] sm:text-[8px] uppercase tracking-[0.12em] px-1.5 py-0.5 rounded text-white/80"
+                  style={{ backgroundColor: "rgba(196,162,101,0.20)", border: "1px solid rgba(196,162,101,0.50)" }}
+                >
+                  {skill}
+                </span>
+              ))}
+            </div>
+          )}
           <h3 className="font-display text-sm sm:text-base lg:text-lg text-white leading-tight tracking-wide truncate text-center">
             {member.nickname}
           </h3>
           <p
-            className="text-[9px] sm:text-[10px] text-white/40 truncate mt-0.5 text-center"
+            className="text-[9px] sm:text-[10px] text-white/40 truncate text-center"
             style={{ fontFamily: "var(--font-body)" }}
           >
             {member.name}
