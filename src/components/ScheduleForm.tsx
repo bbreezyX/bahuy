@@ -131,7 +131,7 @@ export default function ScheduleForm({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto bg-[#0e1112] border-white/10">
+      <DialogContent className="scrollbar-custom max-w-2xl max-h-[85vh] overflow-y-auto bg-[#0e1112] border-white/10">
         <DialogHeader>
           <DialogTitle className="font-display text-2xl tracking-wide text-white">
             {isEdit ? "Edit Jadwal" : "Tambah Jadwal"}
@@ -270,7 +270,7 @@ export default function ScheduleForm({
               Peserta ({form.participants.length}
               {form.maxParticipants ? `/${form.maxParticipants}` : ""})
             </label>
-            <div className="max-h-36 overflow-y-auto rounded-[var(--radius)] border border-white/10 bg-white/[0.02] p-2 grid grid-cols-2 sm:grid-cols-3 gap-1">
+            <div className="scrollbar-custom max-h-36 overflow-y-auto rounded-[var(--radius)] border border-white/10 bg-white/[0.02] p-2 grid grid-cols-2 sm:grid-cols-3 gap-1">
               {members.map((m) => {
                 const selected = form.participants.includes(m.nickname);
                 return (
